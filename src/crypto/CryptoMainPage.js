@@ -54,17 +54,44 @@ function CryptoMainPage(props) {
   };
   
   React.useEffect(() => {
-      if (assets.length === 0) {
-        axios.get('http://localhost:8080/assets', config)
-          .then((response) => {
-            console.log(response.data.assets)
-            setAssets(response.data.assets);
-          })
-          .catch(err => {
-            console.log(err)
-          });
-      }
+    if (assets.length > 0) {
+      return
+    }  
+  
+    axios.get('http://localhost:8080/assets', config)
+      .then((response) => {
+        if (response.data.assets.length > 0) {
+          fetchCrypoPrices(response.data.assets)
+        }
+      })
+      .catch(err => {
+        // TODO: implement error handling
+      });
   });
+
+  const fetchCrypoPrices = (assets) => {
+    axios.get('https://api.binance.com/api/v3/ticker/price')
+      .then((response) => {
+        let cryptos = response.data
+        
+        for (let j = 0; j < assets.length; j++) {
+          let expectedSymbol = assets[j].Abbreviation + "EUR"
+          
+          for (let i = 0; i < cryptos.length; i++) {
+            let symbol = cryptos[i]["symbol"]
+            if (symbol === expectedSymbol) {
+              let amount = parseFloat(assets[j].Amount)
+              let currentPrice = parseFloat(cryptos[i]["price"])
+              let totalPrice = amount * currentPrice
+              
+              assets[j]["Price"] = totalPrice.toFixed(2);
+            } 
+          }
+        }
+
+        setAssets(assets);
+      });
+  };
 
   return (
     <>

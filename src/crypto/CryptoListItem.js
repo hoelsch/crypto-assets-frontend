@@ -35,7 +35,7 @@ function CryptoListItem(props) {
         secondary={<Typography style={{ color: 'rgb(255, 255, 255, 0.8)', fontSize: 12 }}>{props.asset.Abbreviation}</Typography>} 
       />
       <ListItemText 
-        primary={"TODO"}
+        primary={props.asset.Price}
         secondary={<Typography style={{ color: 'rgb(255, 255, 255, 0.8)', fontSize: 12 }}>Euro (€)</Typography>} 
       />
     </MyListItem>
