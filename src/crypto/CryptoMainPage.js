@@ -85,6 +85,23 @@ function CryptoMainPage(props) {
       });
   };
 
+  const getPieChartContent = () => {
+    if (assets.length === 0) {
+      return
+    }
+    let colors = ["rgb(49,32,227)", "rgb(144,54,170)", "rgb(198,52,97)", "rgb(242,156,56)", "rgb(242,156,56)"];
+    let content = [];
+
+    for (let i = 0; i < assets.length; i++) {
+      var hue = Math.floor(Math.random() * 360);
+      var randomColor = 'hsl(' + hue + ', 100%, 80%)';
+
+      content.push({ title: assets[i].Abbreviation, value: parseInt(assets[i].TotalPrice), color: colors[i] });
+    }
+
+    return content
+  };
+
   return (
     <>
       <Box p={4}>
@@ -103,13 +120,9 @@ function CryptoMainPage(props) {
           </Grid>
           <Grid item container direction="row" justifyContent="center" alignItems="center">
             <PieChart
-              style={{ height: '200px' }}
+              style={{ height: '200px', marginBottom: "30px" }}
               lineWidth={20}
-              data={[
-                { title: 'One', value: 10, color: '#E38627' },
-                { title: 'Two', value: 15, color: '#C13C37' },
-                { title: 'Three', value: 20, color: '#6A2135' },
-              ]}
+              data={getPieChartContent()}
             />
             <CryptoList assets={assets}/>
           </Grid>
