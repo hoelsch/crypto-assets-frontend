@@ -46,6 +46,7 @@ function CryptoMainPage(props) {
       // TODO: make it consistent (either use crypto name or type, but not both)
       if (newAssets[i].CryptoName === cryptoType) {
         newAssets[i].Amount += amount;
+        newAssets[i].TotalPrice = (parseFloat(newAssets[i].CurrentPrice) * parseFloat(newAssets[i].Amount)).toFixed(2)
         break;
       }
     }
@@ -80,12 +81,13 @@ function CryptoMainPage(props) {
           for (let i = 0; i < cryptos.length; i++) {
             let symbol = cryptos[i]["symbol"]
             if (symbol === expectedSymbol) {
-              let amount = parseFloat(assets[j].Amount)
-              let currentPrice = parseFloat(cryptos[i]["price"])
-              let totalPrice = amount * currentPrice
+              let amount = parseFloat(assets[j].Amount);
+              let currentPrice = parseFloat(cryptos[i]["price"]);
+              let totalPrice = amount * currentPrice;
               
-              assets[j]["Price"] = totalPrice.toFixed(2);
-            } 
+              assets[j]["CurrentPrice"] = currentPrice;
+              assets[j]["TotalPrice"] = totalPrice.toFixed(2);
+            }
           }
         }
 
