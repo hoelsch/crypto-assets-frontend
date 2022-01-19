@@ -39,26 +39,16 @@ function CryptoMainPage(props) {
        Authorization: "Bearer " + props.token,
     }
   };
-
-  const updateAsset = (cryptoType, amount) => {
-    let newAssets = [...assets]
-    for (let i = 0; i < newAssets.length; i++) {
-      // TODO: make it consistent (either use crypto name or type, but not both)
-      if (newAssets[i].CryptoName === cryptoType) {
-        newAssets[i].Amount += amount;
-        newAssets[i].TotalPrice = (parseFloat(newAssets[i].CurrentPrice) * parseFloat(newAssets[i].Amount)).toFixed(2)
-        break;
-      }
-    }
-
-    setAssets(newAssets)
-  };
   
   React.useEffect(() => {
     if (assets.length > 0) {
       return
     }  
-  
+    
+    fetchAssets()
+  });
+
+  const fetchAssets = () => {
     axios.get('http://localhost:8080/assets', config)
       .then((response) => {
         if (response.data.assets.length > 0) {
@@ -68,7 +58,7 @@ function CryptoMainPage(props) {
       .catch(err => {
         // TODO: implement error handling
       });
-  });
+  }
 
   const fetchCrypoPrices = (assets) => {
     axios.get('https://api.binance.com/api/v3/ticker/price')
@@ -125,7 +115,7 @@ function CryptoMainPage(props) {
           </Grid>
         </Grid>
       </Box>
-      <CryptoAddDialog open={openAddDialog} setOpenAddDialog={setOpenAddDialog} updateAsset={updateAsset} token={props.token} />
+      <CryptoAddDialog open={openAddDialog} setOpenAddDialog={setOpenAddDialog} fetchAssets={fetchAssets} token={props.token} />
     </>
   )
 }

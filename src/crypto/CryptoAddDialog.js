@@ -43,7 +43,7 @@ export default function CryptoAddDialog(props) {
       .then(() => {
         setIsLoading(false);
         setIsSuccess(true);
-        props.updateAsset(cryptoType, amount);
+        props.fetchAssets();
       })
       .catch(err => {
         setIsLoading(false);
