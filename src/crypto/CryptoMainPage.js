@@ -74,9 +74,13 @@ function CryptoMainPage(props) {
               let amount = parseFloat(assets[j].Amount);
               let currentPrice = parseFloat(cryptos[i]["price"]);
               let totalPrice = amount * currentPrice;
-              
+
               assets[j]["CurrentPrice"] = currentPrice;
               assets[j]["TotalPrice"] = totalPrice.toFixed(2);
+
+              //let colors = ["#f44336", "#ff9800", "#673ab7"];
+              let colors = ["rgb(178,139,245)", "rgb(98,215,198)", "#CF6679"];
+              assets[j]["Color"] = colors[j]
             }
           }
         }
@@ -89,14 +93,11 @@ function CryptoMainPage(props) {
     if (assets.length === 0) {
       return
     }
-    let colors = ["rgb(49,32,227)", "rgb(144,54,170)", "rgb(198,52,97)", "rgb(242,156,56)", "rgb(242,156,56)"];
+
     let content = [];
 
     for (let i = 0; i < assets.length; i++) {
-      var hue = Math.floor(Math.random() * 360);
-      var randomColor = 'hsl(' + hue + ', 100%, 80%)';
-
-      content.push({ title: assets[i].Abbreviation, value: parseInt(assets[i].TotalPrice), color: colors[i] });
+      content.push({ title: assets[i].Abbreviation, value: parseInt(assets[i].TotalPrice), color: assets[i].Color });
     }
 
     return content
@@ -123,6 +124,19 @@ function CryptoMainPage(props) {
               style={{ height: '200px', marginBottom: "30px" }}
               lineWidth={20}
               data={getPieChartContent()}
+              label={() => {
+                let total = 0;
+                for (let i = 0; i < assets.length; i++) {
+                  total += parseFloat(assets[i].TotalPrice);
+                }
+
+                return "€" + total
+              }}
+              labelPosition={0}
+              labelStyle={{
+                fontSize: '10px',
+                fill: '#fff',
+              }}
             />
             <CryptoList assets={assets}/>
           </Grid>
