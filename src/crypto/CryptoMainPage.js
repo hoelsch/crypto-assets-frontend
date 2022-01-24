@@ -84,9 +84,29 @@ function CryptoMainPage(props) {
             }
           }
         }
+        
+        let total = 0;
+        for (let i = 0; i < assets.length; i++) {
+          total += parseFloat(assets[i].TotalPrice);
+        }
 
+        for (let i = 0; i < assets.length; i++) {
+          assets[i]["PercentageAmongAllAssets"] =  ((parseFloat(assets[i].TotalPrice) /  parseFloat(total)) * 100).toFixed(2)
+        }
+
+        console.log(assets)
         setAssets(assets);
       });
+  };
+
+  const getTotalAssetBalance = () => {
+    let total = 0;
+    
+    for (let i = 0; i < assets.length; i++) {
+      total += parseFloat(assets[i].TotalPrice);
+    }
+
+    return total
   };
 
   const getPieChartContent = () => {
@@ -125,11 +145,7 @@ function CryptoMainPage(props) {
               lineWidth={20}
               data={getPieChartContent()}
               label={() => {
-                let total = 0;
-                for (let i = 0; i < assets.length; i++) {
-                  total += parseFloat(assets[i].TotalPrice);
-                }
-
+                let total = getTotalAssetBalance()
                 return "€" + total
               }}
               labelPosition={0}
