@@ -94,7 +94,6 @@ function CryptoMainPage(props) {
           assets[i]["PercentageAmongAllAssets"] =  ((parseFloat(assets[i].TotalPrice) /  parseFloat(total)) * 100).toFixed(2)
         }
 
-        console.log(assets)
         setAssets(assets);
       });
   };
@@ -106,7 +105,7 @@ function CryptoMainPage(props) {
       total += parseFloat(assets[i].TotalPrice);
     }
 
-    return total
+    return total.toFixed(2)
   };
 
   const getPieChartContent = () => {
