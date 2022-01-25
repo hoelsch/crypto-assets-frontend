@@ -12,6 +12,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Crypto from './Crypto';
 import CryptoList from './CryptoList';
 import CryptoAddDialog from './CryptoAddDialog';
+import CryptoEditDialog from './CryptoEditDialog';
 
 import { PieChart } from 'react-minimal-pie-chart';
 
@@ -29,6 +30,7 @@ const secondaryButtonStyle = makeStyles({
 
 function CryptoMainPage(props) {
   const [openAddDialog, setOpenAddDialog] = React.useState(false);
+  const [openEditDialog, setOpenEditDialog] = React.useState(false);
   const [assets, setAssets] = React.useState([]);
   
   const primaryButton = primaryButtonStyle();
@@ -133,7 +135,7 @@ function CryptoMainPage(props) {
               </Fab>
             </Grid>
             <Grid item>
-              <Fab className={secondaryButton.root} aria-label="edit">
+              <Fab className={secondaryButton.root} aria-label="edit" onClick={() => setOpenEditDialog(true)}>
                 <EditIcon />
               </Fab>
             </Grid>
@@ -158,6 +160,7 @@ function CryptoMainPage(props) {
         </Grid>
       </Box>
       <CryptoAddDialog open={openAddDialog} setOpenAddDialog={setOpenAddDialog} fetchAssets={fetchAssets} token={props.token} />
+      <CryptoEditDialog open={openEditDialog} setOpenEditDialog={setOpenEditDialog} assets={assets} token={props.token} />
     </>
   )
 }
