@@ -20,8 +20,24 @@ import SuccessDialog from '../SuccessDialog/SuccessDialog';
 import ErrorText from '../ErrorText/ErrorText';
 
 export default function CryptoEditDialog(props) {  
+  const config = {
+    headers: {
+       Authorization: "Bearer " + props.token,
+    }
+  };
+  
   const handleClose = () => {
     props.setOpenEditDialog(false);
+  };
+
+  const handleAssetDelete = (cryptoName) => {
+    axios.delete('http://localhost:8080/assets/' + cryptoName, config)
+    .then(() => {
+      console.log("deleted asset")
+    })
+    .catch(err => {
+      console.log(err)
+    });
   };
 
   return (
@@ -34,7 +50,7 @@ export default function CryptoEditDialog(props) {
               props.assets.map((a) =>
               <ListItem
                 secondaryAction={
-                  <IconButton edge="end" aria-label="delete">
+                  <IconButton onClick={() => handleAssetDelete(a.CryptoName)} edge="end" aria-label="delete">
                     <DeleteIcon />
                   </IconButton>
                 }
