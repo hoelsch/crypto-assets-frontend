@@ -124,6 +124,16 @@ function CryptoMainPage(props) {
     return content
   };
 
+  const getCopyOfAssetsForEdit = () => {
+    const assetsCopy = [];
+    for (let i = 0; i < assets.length; i++) {
+      const a = assets[i]
+      assetsCopy.push({"CryptoName": a.CryptoName, "Amount": a.Amount});
+    }
+
+    return assetsCopy
+  };
+
   return (
     <>
       <Box p={4}>
@@ -160,7 +170,7 @@ function CryptoMainPage(props) {
         </Grid>
       </Box>
       <CryptoAddDialog open={openAddDialog} setOpenAddDialog={setOpenAddDialog} fetchAssets={fetchAssets} token={props.token} />
-      <CryptoEditDialog open={openEditDialog} setOpenEditDialog={setOpenEditDialog} assets={assets} token={props.token} />
+      <CryptoEditDialog open={openEditDialog} setOpenEditDialog={setOpenEditDialog} assets={getCopyOfAssetsForEdit()} token={props.token} />
     </>
   )
 }

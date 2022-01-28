@@ -19,7 +19,13 @@ import ProgressIcon from '../ProgressIcon/ProgressIcon';
 import SuccessDialog from '../SuccessDialog/SuccessDialog';
 import ErrorText from '../ErrorText/ErrorText';
 
-export default function CryptoEditDialog(props) {  
+export default function CryptoEditDialog(props) {
+  const [assetsToUpdate, setAssetsToUpdate] = React.useState([]);
+
+  React.useEffect(() => {
+    setAssetsToUpdate(props.assets)
+  });
+
   const config = {
     headers: {
        Authorization: "Bearer " + props.token,
@@ -40,6 +46,39 @@ export default function CryptoEditDialog(props) {
     });
   };
 
+  const handleAmountChange = (cryptoName, amount) => {
+    const newAssets = [...assetsToUpdate]
+    for (let i = 0; i < newAssets.length; i++) {
+      if (newAssets[i].CryptoName === cryptoName) {
+        newAssets[i].Amount = amount
+        newAssets[i]["Updated"] = true
+        break
+      }
+    }
+
+    setAssetsToUpdate(newAssets)
+  };
+
+  const handleUpdateAssets = () => {
+    for (let i = 0; i < assetsToUpdate.length; i++) {
+      console.log(typeof assetsToUpdate[i])
+      if (!"Updated" in assetsToUpdate[i]) {
+        continue;
+      }
+
+      const cryptoName = assetsToUpdate[i]["CryptoName"]
+      const amount = assetsToUpdate[i]["Amount"]
+
+      axios.put('http://localhost:8080/assets/' + cryptoName, {amount: amount}, config)
+      .then(() => {
+        // TODO: implement handling when success
+      })
+      .catch(err => {
+        // TODO: implement handling for error
+      });
+    };
+  };
+
   return (
     <>
       <Dialog open={props.open} onClose={handleClose} fullWidth={true} maxWidth={"xs"}>
@@ -47,7 +86,7 @@ export default function CryptoEditDialog(props) {
         <DialogContent>
           <List>
             {
-              props.assets.map((a) =>
+              assetsToUpdate.map((a) =>
               <ListItem
                 secondaryAction={
                   <IconButton onClick={() => handleAssetDelete(a.CryptoName)} edge="end" aria-label="delete">
@@ -65,6 +104,7 @@ export default function CryptoEditDialog(props) {
                   InputLabelProps={{
                     shrink: true,
                   }}
+                  onChange={(event) => handleAmountChange(a.CryptoName, parseFloat(event.target.value))}
                 />
               </ListItem>
               )
@@ -74,6 +114,7 @@ export default function CryptoEditDialog(props) {
         <DialogActions>
           <>
             <Button onClick={handleClose}>Cancel</Button>
+            <Button onClick={handleUpdateAssets}>Apply</Button>
           </>
         </DialogActions>
       </Dialog>
