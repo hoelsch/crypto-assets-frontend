@@ -21,6 +21,8 @@ import ErrorText from '../ErrorText/ErrorText';
 
 export default function CryptoEditDialog(props) {
   const [assetsToUpdate, setAssetsToUpdate] = React.useState([]);
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [isSuccess, setIsSuccess] = React.useState(false);
 
   React.useEffect(() => {
     setAssetsToUpdate(props.assets)
@@ -34,6 +36,8 @@ export default function CryptoEditDialog(props) {
   
   const handleClose = () => {
     props.setOpenEditDialog(false);
+    setIsSuccess(false);
+    setIsLoading(false);
   };
 
   const handleAssetDelete = (cryptoName) => {
@@ -60,8 +64,11 @@ export default function CryptoEditDialog(props) {
   };
 
   const handleUpdateAssets = () => {
+    setIsLoading(true);
+    
+    const requests = []
+    
     for (let i = 0; i < assetsToUpdate.length; i++) {
-      console.log(typeof assetsToUpdate[i])
       if (!"Updated" in assetsToUpdate[i]) {
         continue;
       }
@@ -69,21 +76,26 @@ export default function CryptoEditDialog(props) {
       const cryptoName = assetsToUpdate[i]["CryptoName"]
       const amount = assetsToUpdate[i]["Amount"]
 
-      axios.put('http://localhost:8080/assets/' + cryptoName, {amount: amount}, config)
+      requests.push(axios.put('http://localhost:8080/assets/' + cryptoName, {amount: amount}, config))      
+    };
+
+    axios.all(requests)
       .then(() => {
-        // TODO: implement handling when success
+        setIsLoading(false);
+        setIsSuccess(true);
       })
       .catch(err => {
-        // TODO: implement handling for error
+        setIsLoading(false);
+        setIsSuccess(false);
       });
-    };
   };
 
   return (
     <>
       <Dialog open={props.open} onClose={handleClose} fullWidth={true} maxWidth={"xs"}>
-      <DialogTitle>Edit your Assets</DialogTitle>
+      {!isSuccess && <DialogTitle>Edit your Assets</DialogTitle>}
         <DialogContent>
+        { !isSuccess &&
           <List>
             {
               assetsToUpdate.map((a) =>
@@ -110,12 +122,18 @@ export default function CryptoEditDialog(props) {
               )
             }
           </List>
+          }
+          {isLoading && <ProgressIcon />}
+          {isSuccess && <SuccessDialog message={"Successfully updated Assets"} />}
         </DialogContent>
         <DialogActions>
+        {isSuccess && <Button onClick={handleClose}>Close</Button>}
+        {!isSuccess &&
           <>
             <Button onClick={handleClose}>Cancel</Button>
             <Button onClick={handleUpdateAssets}>Apply</Button>
           </>
+        }
         </DialogActions>
       </Dialog>
     </>
