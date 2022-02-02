@@ -41,13 +41,14 @@ export default function CryptoEditDialog(props) {
   };
 
   const handleAssetDelete = (cryptoName) => {
-    axios.delete('http://localhost:8080/assets/' + cryptoName, config)
-    .then(() => {
-      console.log("deleted asset")
-    })
-    .catch(err => {
-      console.log(err)
-    });
+    const newAssets = [...assetsToUpdate]
+    for (let i = 0; i < newAssets.length; i++) {
+      if (newAssets[i].CryptoName === cryptoName) {
+        newAssets[i]["Deleted"] = true;
+      }
+    }
+
+    setAssetsToUpdate(newAssets)
   };
 
   const handleAmountChange = (cryptoName, amount) => {
@@ -69,14 +70,14 @@ export default function CryptoEditDialog(props) {
     const requests = []
     
     for (let i = 0; i < assetsToUpdate.length; i++) {
-      if (!"Updated" in assetsToUpdate[i]) {
-        continue;
-      }
-
       const cryptoName = assetsToUpdate[i]["CryptoName"]
-      const amount = assetsToUpdate[i]["Amount"]
-
-      requests.push(axios.put('http://localhost:8080/assets/' + cryptoName, {amount: amount}, config))      
+      
+      if ("Updated" in assetsToUpdate[i]) {
+        const amount = assetsToUpdate[i]["Amount"]
+        requests.push(axios.put('http://localhost:8080/assets/' + cryptoName, {amount: amount}, config))
+      } else if ("Deleted" in assetsToUpdate[i]) {
+        requests.push(axios.delete('http://localhost:8080/assets/' + cryptoName, config))
+      }
     };
 
     axios.all(requests)
@@ -99,7 +100,9 @@ export default function CryptoEditDialog(props) {
         { !isSuccess &&
           <List>
             {
-              assetsToUpdate.map((a) =>
+              assetsToUpdate
+                .filter((a) => !("Deleted" in a))
+                .map((a) =>
               <ListItem
                 secondaryAction={
                   <IconButton onClick={() => handleAssetDelete(a.CryptoName)} edge="end" aria-label="delete">
