@@ -83,6 +83,7 @@ export default function CryptoEditDialog(props) {
       .then(() => {
         setIsLoading(false);
         setIsSuccess(true);
+        props.fetchAssets();
       })
       .catch(err => {
         setIsLoading(false);

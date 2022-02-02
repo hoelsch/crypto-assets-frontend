@@ -170,7 +170,7 @@ function CryptoMainPage(props) {
         </Grid>
       </Box>
       <CryptoAddDialog open={openAddDialog} setOpenAddDialog={setOpenAddDialog} fetchAssets={fetchAssets} token={props.token} />
-      <CryptoEditDialog open={openEditDialog} setOpenEditDialog={setOpenEditDialog} assets={getCopyOfAssetsForEdit()} token={props.token} />
+      <CryptoEditDialog open={openEditDialog} setOpenEditDialog={setOpenEditDialog} fetchAssets={fetchAssets} assets={getCopyOfAssetsForEdit()} token={props.token} />
     </>
   )
 }
