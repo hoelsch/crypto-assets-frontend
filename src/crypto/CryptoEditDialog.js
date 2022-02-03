@@ -52,6 +52,10 @@ export default function CryptoEditDialog(props) {
   };
 
   const handleAmountChange = (cryptoName, amount) => {
+    if (amount < 0) {
+      amount = 0;
+    }
+
     const newAssets = [...assetsToUpdate]
     for (let i = 0; i < newAssets.length; i++) {
       if (newAssets[i].CryptoName === cryptoName) {
