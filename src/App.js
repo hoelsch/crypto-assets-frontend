@@ -19,10 +19,10 @@ function App() {
     setJwt(token)
   };
 
+  //<Button sx={{ p: 30 }} variant="outlined" onClick={handleClickLogut}>Logout</Button>
   if (jwt) {
     return (
       <>
-        <Button variant="outlined" onClick={handleClickLogut}>Logout</Button>
         <CryptoMainPage token={jwt}/>
       </>
     );

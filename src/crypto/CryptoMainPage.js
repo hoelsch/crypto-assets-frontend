@@ -14,6 +14,8 @@ import CryptoList from './CryptoList';
 import CryptoAddDialog from './CryptoAddDialog';
 import CryptoEditDialog from './CryptoEditDialog';
 
+import Button from '@mui/material/Button';
+
 import { PieChart } from 'react-minimal-pie-chart';
 
 const primaryButtonStyle = makeStyles({
@@ -136,9 +138,10 @@ function CryptoMainPage(props) {
 
   return (
     <>
+      <Button sx={{ p: 1, position: "fixed", top: 35, right: 35}} variant="text">Logout</Button>
       <Box p={4}>
         <Grid container>
-          <Grid item container direction="row" justifyContent="flex-end" alignItems="flex-start" spacing={2} p={1}>
+          <Grid item container direction="row" justifyContent="flex-start" alignItems="flex-start" spacing={2} p={1}>
             <Grid item>
               <Fab className={primaryButton.root} aria-label="add" onClick={() => setOpenAddDialog(true)}>
                 <AddIcon />
@@ -162,7 +165,7 @@ function CryptoMainPage(props) {
               labelPosition={0}
               labelStyle={{
                 fontSize: '10px',
-                fill: '#fff',
+                fill: 'rgb(50,61,73)',
               }}
             />
             <CryptoList assets={assets}/>

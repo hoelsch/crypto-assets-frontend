@@ -13,8 +13,7 @@ import Box from '@mui/material/Box';
 function CryptoListItem(props) {  
   const StyledLinearProgress = withStyles({
     colorPrimary: {
-      //backgroundColor: "rgba(255, 255, 255, 0.7)"
-      backgroundColor: "white"
+      backgroundColor: "rgb(240,240,240)"
     },
     barColorPrimary: {
       backgroundColor: props.asset.Color
@@ -39,10 +38,10 @@ function CryptoListItem(props) {
   
   return (
     <div style={{
-      background: 'rgb(30, 30, 30)',
+      background: 'white',
       border: 0,
       borderRadius: 8,
-      color: 'white',
+      color: 'rgb(50,61,73)',
       height: 100,
       width: 400,
       padding: '20px',
@@ -57,11 +56,11 @@ function CryptoListItem(props) {
         />
         <ListItemText 
           primary={props.asset.Amount}
-          secondary={<Typography style={{ color: 'rgb(255, 255, 255, 0.8)', fontSize: 12 }}>{props.asset.Abbreviation}</Typography>} 
+          secondary={<Typography style={{ color: 'rgb(50,61,73)', fontSize: 12 }}>{props.asset.Abbreviation}</Typography>} 
         />
         <ListItemText 
           primary={props.asset.TotalPrice}
-          secondary={<Typography style={{ color: 'rgb(255, 255, 255, 0.8)', fontSize: 12 }}>Euro (€)</Typography>} 
+          secondary={<Typography style={{ color: 'rgb(50,61,73)', fontSize: 12 }}>Euro (€)</Typography>} 
         />
       </ListItem>
       <LinearProgressWithLabel value={props.asset.PercentageAmongAllAssets} />
