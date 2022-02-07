@@ -8,23 +8,17 @@ import { styled } from '@material-ui/core/styles';
 import { withStyles } from "@material-ui/core/styles";
 
 import LinearProgress from '@mui/material/LinearProgress';
+import ColoredLinearProgress from './ColoredLinearProgress.js';
 import Box from '@mui/material/Box';
 
-function CryptoListItem(props) {  
-  const StyledLinearProgress = withStyles({
-    colorPrimary: {
-      backgroundColor: "rgb(240,240,240)"
-    },
-    barColorPrimary: {
-      backgroundColor: props.asset.Color
-    }
-  })(LinearProgress);
+function CryptoListItem(props) {
+  const barColor = props.asset.Color;
 
   function LinearProgressWithLabel(props) {
     return (
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
         <Box sx={{ width: '100%', mr: 1 }}>
-          <StyledLinearProgress variant="determinate" value={props.value} />
+          <ColoredLinearProgress value={props.value} progressColor={barColor}/>
         </Box>
         <Box sx={{ minWidth: 35 }}>
           <Typography variant="body2" color="text.secondary">{`${Math.round(
@@ -34,7 +28,6 @@ function CryptoListItem(props) {
       </Box>
     );
   }
-
   
   return (
     <div style={{
