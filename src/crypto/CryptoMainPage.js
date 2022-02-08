@@ -138,7 +138,7 @@ function CryptoMainPage(props) {
 
   return (
     <>
-      <Button sx={{ p: 1, position: "fixed", top: 35, right: 35}} variant="text">Logout</Button>
+      <Button sx={{ p: 1, position: "fixed", top: 35, right: 35}} variant="text" onClick={props.handleClickLogut}>Logout</Button>
       <Box p={4}>
         <Grid container>
           <Grid item container direction="row" justifyContent="flex-start" alignItems="flex-start" spacing={2} p={1}>
