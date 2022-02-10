@@ -55,7 +55,7 @@ export default function RegisterDialog() {
 
   return (
     <>
-      <Button variant="outlined" onClick={handleClickOpen}>Register</Button>
+      <Button sx={{mt:5, mr:5}} onClick={handleClickOpen}>Register</Button>
       <Dialog open={open} onClose={handleClose}>
         {!isSuccess && <DialogTitle>Register</DialogTitle>}
         <DialogContent>

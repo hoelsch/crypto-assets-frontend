@@ -57,7 +57,7 @@ export default function LoginDialog(props) {
 
   return (
     <>
-      <Button variant="outlined" onClick={handleClickOpen}>Login</Button>
+      <Button sx={{mt:5}} variant="contained" onClick={handleClickOpen}>Login</Button>
       <Dialog open={open} onClose={handleClose}>
         {!isSuccess && <DialogTitle>Login</DialogTitle>}
         <DialogContent>
