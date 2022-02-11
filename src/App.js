@@ -23,7 +23,6 @@ function App() {
     setJwt(token)
   };
 
-  //<Button sx={{ p: 30 }} variant="outlined" onClick={handleClickLogut}>Logout</Button>
   if (jwt) {
     return (
       <>
@@ -31,14 +30,6 @@ function App() {
       </>
     );
   }
-
-  /*return (
-    <>
-      Your crypto assets in one place
-      <RegisterDialog />
-      <LoginDialog handleLoginSuccess={handleLoginSuccess} />
-    </>
-  );*/
 
   return (
     <Box sx={{ height: 300, width: 300, backgroundColor: "white", ml: "auto", mr: "auto", mt: 10, textAlign: "center", p: 10, borderRadius: 8 }}>

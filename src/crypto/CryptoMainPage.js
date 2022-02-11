@@ -34,6 +34,7 @@ function CryptoMainPage(props) {
   const [openAddDialog, setOpenAddDialog] = React.useState(false);
   const [openEditDialog, setOpenEditDialog] = React.useState(false);
   const [assets, setAssets] = React.useState([]);
+  const [showEmtpyAssetsMessage, setShowEmtpyAssetsMessage] = React.useState(false);
   
   const primaryButton = primaryButtonStyle();
   const secondaryButton = secondaryButtonStyle();
@@ -44,7 +45,7 @@ function CryptoMainPage(props) {
     }
   };
   
-  React.useEffect(() => {
+  React.useEffect(() => {  
     if (assets.length > 0) {
       return
     }  
@@ -55,50 +56,60 @@ function CryptoMainPage(props) {
   const fetchAssets = () => {
     axios.get('http://localhost:8080/assets', config)
       .then((response) => {
-        if (response.data.assets.length > 0) {
-          fetchCrypoPrices(response.data.assets)
+        const assetsFromServer = response.data.assets
+        if (assetsFromServer && assetsFromServer.length > 0) {
+          setShowEmtpyAssetsMessage(false)
+          fetchCrypoPrices(assetsFromServer)
+        } else {
+          if (assets.length > 0) {
+            setAssets([])
+          }
+          
+          setShowEmtpyAssetsMessage(true)
         }
+        console.log("called fetch assets")
       })
       .catch(err => {
+        console.log(err)
         // TODO: implement error handling
       });
   }
 
-  const fetchCrypoPrices = (assets) => {
+  const fetchCrypoPrices = (fetchedAssets) => {
     axios.get('https://api.binance.com/api/v3/ticker/price')
       .then((response) => {
         let cryptos = response.data
         
-        for (let j = 0; j < assets.length; j++) {
-          let expectedSymbol = assets[j].Abbreviation + "EUR"
+        for (let j = 0; j < fetchedAssets.length; j++) {
+          let expectedSymbol = fetchedAssets[j].Abbreviation + "EUR"
           
           for (let i = 0; i < cryptos.length; i++) {
             let symbol = cryptos[i]["symbol"]
             if (symbol === expectedSymbol) {
-              let amount = parseFloat(assets[j].Amount);
+              let amount = parseFloat(fetchedAssets[j].Amount);
               let currentPrice = parseFloat(cryptos[i]["price"]);
               let totalPrice = amount * currentPrice;
 
-              assets[j]["CurrentPrice"] = currentPrice;
-              assets[j]["TotalPrice"] = totalPrice.toFixed(2);
+              fetchedAssets[j]["CurrentPrice"] = currentPrice;
+              fetchedAssets[j]["TotalPrice"] = totalPrice.toFixed(2);
 
               //let colors = ["#f44336", "#ff9800", "#673ab7"];
               let colors = ["rgb(178,139,245)", "rgb(98,215,198)", "#CF6679"];
-              assets[j]["Color"] = colors[j]
+              fetchedAssets[j]["Color"] = colors[j]
             }
           }
         }
         
         let total = 0;
-        for (let i = 0; i < assets.length; i++) {
-          total += parseFloat(assets[i].TotalPrice);
+        for (let i = 0; i < fetchedAssets.length; i++) {
+          total += parseFloat(fetchedAssets[i].TotalPrice);
         }
 
-        for (let i = 0; i < assets.length; i++) {
-          assets[i]["PercentageAmongAllAssets"] =  ((parseFloat(assets[i].TotalPrice) /  parseFloat(total)) * 100).toFixed(2)
+        for (let i = 0; i < fetchedAssets.length; i++) {
+          fetchedAssets[i]["PercentageAmongAllAssets"] =  ((parseFloat(fetchedAssets[i].TotalPrice) /  parseFloat(total)) * 100).toFixed(2)
         }
 
-        setAssets(assets);
+       setAssets(fetchedAssets)
       });
   };
 
@@ -112,7 +123,7 @@ function CryptoMainPage(props) {
     return total.toFixed(2)
   };
 
-  const getPieChartContent = () => {
+  const getPieChartContent = () => {    
     if (assets.length === 0) {
       return
     }
@@ -147,11 +158,13 @@ function CryptoMainPage(props) {
                 <AddIcon />
               </Fab>
             </Grid>
-            <Grid item>
-              <Fab className={secondaryButton.root} aria-label="edit" onClick={() => setOpenEditDialog(true)}>
-                <EditIcon />
-              </Fab>
-            </Grid>
+            { !showEmtpyAssetsMessage && assets.length > 0 &&
+              <Grid item>
+                <Fab className={secondaryButton.root} aria-label="edit" onClick={() => setOpenEditDialog(true)}>
+                  <EditIcon />
+                </Fab>
+              </Grid>
+            }
           </Grid>
           <Grid item container direction="row" justifyContent="center" alignItems="center">
             <PieChart
@@ -169,6 +182,12 @@ function CryptoMainPage(props) {
               }}
             />
             <CryptoList assets={assets}/>
+            {  showEmtpyAssetsMessage &&
+              <Box sx={{ height: 100, width: 350, backgroundColor: "white", ml: "auto", mr: "auto", textAlign: "center", p: 10, borderRadius: 8 }}>
+                <h2>No Crypto added to Assets yet</h2>
+                Press top left Button to add Crypto
+              </Box>
+            }
           </Grid>
         </Grid>
       </Box>
