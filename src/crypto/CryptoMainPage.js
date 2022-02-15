@@ -2,14 +2,14 @@ import React from 'react';
 
 import axios from 'axios';
 
-import Box from '@material-ui/core/Box';
-import Fab from '@material-ui/core/Fab';
-import AddIcon from '@material-ui/icons/Add';
-import EditIcon from '@material-ui/icons/Edit';
-import Grid from '@material-ui/core/Grid';
-import { makeStyles } from '@material-ui/core/styles';
+import Box from '@mui/material/Box';
+import Fab from '@mui/material/Fab';
+import AddIcon from '@mui/icons-material/Add';
+import EditIcon from '@mui/icons-material/Edit';
+import Grid from '@mui/material/Grid';
 
-import Crypto from './Crypto';
+import { makeStyles } from '@mui/styles';
+
 import CryptoList from './CryptoList';
 import CryptoAddDialog from './CryptoAddDialog';
 import CryptoEditDialog from './CryptoEditDialog';
@@ -154,13 +154,13 @@ function CryptoMainPage(props) {
         <Grid container>
           <Grid item container direction="row" justifyContent="flex-start" alignItems="flex-start" spacing={2} p={1}>
             <Grid item>
-              <Fab className={primaryButton.root} aria-label="add" onClick={() => setOpenAddDialog(true)}>
+              <Fab sx={{background: '#BB86FC'}} aria-label="add" onClick={() => setOpenAddDialog(true)}>
                 <AddIcon />
               </Fab>
             </Grid>
             { !showEmtpyAssetsMessage && assets.length > 0 &&
               <Grid item>
-                <Fab className={secondaryButton.root} aria-label="edit" onClick={() => setOpenEditDialog(true)}>
+                <Fab sx={{background: '#03DAC6'}} className={secondaryButton.root} aria-label="edit" onClick={() => setOpenEditDialog(true)}>
                   <EditIcon />
                 </Fab>
               </Grid>
