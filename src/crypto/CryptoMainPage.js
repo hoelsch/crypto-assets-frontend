@@ -153,13 +153,13 @@ function CryptoMainPage(props) {
         <Grid container>
           <Grid item container direction="row" justifyContent="flex-start" alignItems="flex-start" spacing={2} p={1}>
             <Grid item>
-              <Fab sx={{background: '#BB86FC'}} aria-label="add" onClick={() => setOpenAddDialog(true)}>
+              <Fab sx={{background: '#BB86FC', '&:hover': {background: '#BB86FC'}, '&:active': {background: "rgb(187,134,252,0.4)"}}} aria-label="add" onClick={() => setOpenAddDialog(true)}>
                 <AddIcon />
               </Fab>
             </Grid>
             { !showEmtpyAssetsMessage && assets.length > 0 &&
               <Grid item>
-                <Fab sx={{background: '#03DAC6'}} className={secondaryButton.root} aria-label="edit" onClick={() => setOpenEditDialog(true)}>
+                <Fab sx={{background: '#03DAC6', '&:hover': {background: '#03DAC6'}, '&:active': {background: "rgb(3,218,198,0.4)"}}} className={secondaryButton.root} aria-label="edit" onClick={() => setOpenEditDialog(true)}>
                   <EditIcon />
                 </Fab>
               </Grid>
