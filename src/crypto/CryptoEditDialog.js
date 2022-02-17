@@ -14,6 +14,9 @@ import ListItem from '@mui/material/ListItem';
 import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
 
+import Paper from '@mui/material/Paper';
+import Grid from '@mui/material/Grid';
+
 import CryptoTypeSelect from './CryptoTypeSelect';
 import ProgressIcon from '../ProgressIcon/ProgressIcon';
 import SuccessDialog from '../SuccessDialog/SuccessDialog';
@@ -127,18 +130,25 @@ export default function CryptoEditDialog(props) {
                   </IconButton>
                 }
               >
-                {a.CryptoName}
-                <TextField
-                  id="outlined-number"
-                  label="Amount"
-                  value={a.Amount}
-                  type="number"
-                  margin="normal"
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  onChange={(event) => handleAmountChange(a.CryptoName, parseFloat(event.target.value))}
-                />
+                <Grid container spacing={2}>
+                  <Grid item xs={4}>
+                    <Paper elevation={0} sx={{mt: 4}}>{a.CryptoName}</Paper>
+                  </Grid>
+                  <Grid item xs={8}>
+                    <TextField
+                      sx={{width: 150}}
+                      id="outlined-number"
+                      label="Amount"
+                      value={a.Amount}
+                      type="number"
+                      margin="normal"
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                      onChange={(event) => handleAmountChange(a.CryptoName, parseFloat(event.target.value))}
+                    />
+                  </Grid>
+                </Grid>
               </ListItem>
               )
             }
