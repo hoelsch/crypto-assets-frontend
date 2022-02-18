@@ -92,8 +92,9 @@ function CryptoMainPage(props) {
 
               fetchedAssets[j]["CurrentPrice"] = currentPrice;
               fetchedAssets[j]["TotalPrice"] = totalPrice.toFixed(2);
-
-              let colors = {"bitcoin": "#CF6679", "ethereum": "rgb(178,139,245)", "cardano": "rgb(98,215,198)"};
+              
+              // "bitcoin": "#CF6679", "ethereum": "rgb(178,139,245)", "cardano": "rgb(98,215,198)"
+              let colors = {"bitcoin": "rgb(98,215,198)", "ethereum": "rgb(178,139,245)", "cardano": "#CF6679"};
               fetchedAssets[j]["Color"] = colors[fetchedAssets[j].CryptoName]
             }
           }

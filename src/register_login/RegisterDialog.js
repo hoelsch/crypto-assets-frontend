@@ -13,21 +13,41 @@ import ErrorText from '../ErrorText/ErrorText';
 import ProgressIcon from '../ProgressIcon/ProgressIcon';
 import SuccessDialog from '../SuccessDialog/SuccessDialog';
 
+const validateEmail = (email) => {
+  return String(email)
+    .toLowerCase()
+    .match(
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    );
+};
+
 export default function RegisterDialog() {
   const [open, setOpen] = React.useState(false);
   const [error, setError] = React.useState();
   const [isLoading, setIsLoading] = React.useState(false);
   const [isSuccess, setIsSuccess] = React.useState(false);
   
-  var userName;
-  var userPassword;
-  var userMail;
-
+  const [userName, setUserName] = React.useState("");
+  const [userPassword, setUserPassword] = React.useState("");
+  const [userMail, setUserMail] = React.useState("");
+  
+  const [userNameError, setUserNameError] = React.useState("");
+  const [mailError, setMailError] = React.useState("");
+  const [passwordError, setPasswordError] = React.useState("");
+  
   const handleClickOpen = () => {
     setError();
     setIsLoading(false)
     setIsSuccess(false)
     setOpen(true);
+
+    setUserName("")
+    setUserMail("")
+    setUserPassword("")
+
+    setUserNameError("")
+    setMailError("")
+    setPasswordError("")
   };
 
   const handleClose = () => {
@@ -35,6 +55,14 @@ export default function RegisterDialog() {
   };
 
   const handleClickRegister = () => {
+    if (userNameError || passwordError || mailError) {
+      return;
+    }
+
+    if (userName === "" || userMail === "" || userPassword === "") {
+      return;
+    }
+
     const user = {name: userName, mail: userMail, password: userPassword};
 
     setIsLoading(true)
@@ -49,7 +77,7 @@ export default function RegisterDialog() {
         .catch(err => {
           setIsLoading(false)
           setIsSuccess(false)
-          setError(err.message)
+          setError(err.response.data.error)
         });
   };
 
@@ -66,27 +94,57 @@ export default function RegisterDialog() {
                 margin="dense"
                 id="name"
                 label="User Name"
+                error={userNameError}
+                helperText={userNameError}
                 fullWidth
                 variant="standard"
-                onInput={e => userName = e.target.value}
+                onInput={e => {
+                  const providedUserName = e.target.value;
+                  if (providedUserName.length < 3) {
+                    setUserNameError("User name must have at least 3 characters")
+                  } else {
+                    setUserName(providedUserName)
+                    setUserNameError("")
+                  }
+                }}
               />
               <TextField
                 margin="dense"
                 id="email"
                 label="Email Address"
                 type="email"
+                error={mailError}
+                helperText={mailError}
                 fullWidth
                 variant="standard"
-                onInput={e => userMail = e.target.value}
+                onInput={e => {
+                  const providedUserMail = e.target.value;
+                  if (!validateEmail(providedUserMail)) {
+                    setMailError("Invalid mail address provided")
+                  } else {
+                    setUserMail(providedUserMail);
+                    setMailError("")
+                  }
+                }}
               />
               <TextField
                 margin="dense"
                 id="password"
                 label="Password"
+                error={passwordError}
+                helperText={passwordError}
                 type="password"
                 fullWidth
                 variant="standard"
-                onInput={e => userPassword = e.target.value}
+                onInput={e => {
+                  const providedUserPassword = e.target.value;
+                  if (providedUserPassword.length < 8) {
+                    setPasswordError("Password must have at least 8 characters")
+                  } else {
+                    setUserPassword(providedUserPassword);
+                    setPasswordError("");
+                  }
+                }}
               />
             </>
           }
