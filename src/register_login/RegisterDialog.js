@@ -66,6 +66,7 @@ export default function RegisterDialog() {
     const user = {name: userName, mail: userMail, password: userPassword};
 
     setIsLoading(true)
+    setError()
 
     // TODO: make URL configurable
     axios.post('http://localhost:8080/users', user)
@@ -77,7 +78,12 @@ export default function RegisterDialog() {
         .catch(err => {
           setIsLoading(false)
           setIsSuccess(false)
-          setError(err.response.data.error)
+
+          if (err.response && err.response.data && err.response.data.error) {
+            setError(err.response.data.error)
+          } else {
+            setError(err.message)
+          }
         });
   };
 
