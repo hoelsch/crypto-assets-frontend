@@ -1,6 +1,7 @@
 import React from "react";
 
 import Box from "@mui/material/Box";
+
 import LoginDialog from "./../register_login/LoginDialog";
 import RegisterDialog from "./../register_login/RegisterDialog";
 
