@@ -1,11 +1,13 @@
-import * as React from 'react';
+import * as React from "react";
 
-import DialogContentText from '@mui/material/DialogContentText';
+import DialogContentText from "@mui/material/DialogContentText";
 
-export default function ErrorText(props) {
+function ErrorText(props) {
   return (
-    <DialogContentText sx={{mt: 4, color: "red"}}>
+    <DialogContentText sx={{ mt: 4, color: "red" }}>
       {props.error}
     </DialogContentText>
   );
 }
+
+export default ErrorText;
