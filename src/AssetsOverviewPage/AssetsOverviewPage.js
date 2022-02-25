@@ -10,9 +10,9 @@ import Grid from '@mui/material/Grid';
 
 import { makeStyles } from '@mui/styles';
 
-import CryptoList from './CryptoList';
-import CryptoAddDialog from './CryptoAddDialog';
-import CryptoEditDialog from './CryptoEditDialog';
+import CryptoList from './../CryptoList/CryptoList';
+import CryptoAddDialog from './../CryptoAddDialog/CryptoAddDialog';
+import CryptoEditDialog from './../CryptoEditDialog/CryptoEditDialog';
 
 import Button from '@mui/material/Button';
 
@@ -30,7 +30,7 @@ const secondaryButtonStyle = makeStyles({
   },
 });
 
-function CryptoMainPage(props) {
+function AssetsOverviewPage(props) {
   const [openAddDialog, setOpenAddDialog] = React.useState(false);
   const [openEditDialog, setOpenEditDialog] = React.useState(false);
   const [assets, setAssets] = React.useState([]);
@@ -197,4 +197,4 @@ function CryptoMainPage(props) {
   )
 }
   
-export default CryptoMainPage;
+export default AssetsOverviewPage;

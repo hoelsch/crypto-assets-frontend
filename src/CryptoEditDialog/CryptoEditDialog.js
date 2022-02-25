@@ -17,7 +17,6 @@ import IconButton from '@mui/material/IconButton';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
 
-import CryptoTypeSelect from './CryptoTypeSelect';
 import ProgressIcon from '../ProgressIcon/ProgressIcon';
 import SuccessDialog from '../SuccessDialog/SuccessDialog';
 import ErrorText from '../ErrorText/ErrorText';

@@ -1,6 +1,6 @@
 import React from "react";
 
-import CryptoMainPage from "./crypto/CryptoMainPage";
+import AssetsOverviewPage from "./AssetsOverviewPage/AssetsOverviewPage";
 import LandingPage from "./LandingPage/LandingPage";
 
 function App() {
@@ -18,7 +18,7 @@ function App() {
   };
 
   if (jwt) {
-    return <CryptoMainPage token={jwt} handleClickLogout={handleClickLogout} />;
+    return <AssetsOverviewPage token={jwt} handleClickLogout={handleClickLogout} />;
   }
 
   return <LandingPage handleLoginSuccess={handleLoginSuccess} />;
