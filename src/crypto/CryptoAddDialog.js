@@ -18,7 +18,7 @@ import ErrorText from '../ErrorText/ErrorText';
 export default function CryptoAddDialog(props) {
   const [supportedCryptos, setSupportedCryptos] = React.useState([]);
   const [cryptoType, setCryptoType] = React.useState("bitcoin");
-  const [amount, setAmount] = React.useState("1.0");
+  const [amount, setAmount] = React.useState(0.1);
   const [isLoading, setIsLoading] = React.useState(false);
   const [isSuccess, setIsSuccess] = React.useState(false);
   const [error, setError] = React.useState();
@@ -35,7 +35,7 @@ export default function CryptoAddDialog(props) {
     setIsLoading(false);
     setError();
     setCryptoType("bitcoin");
-    setAmount("1.0")
+    setAmount(0.1)
   };
 
   const handleAdd = () => {

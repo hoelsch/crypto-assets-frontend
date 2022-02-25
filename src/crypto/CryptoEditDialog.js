@@ -26,6 +26,7 @@ export default function CryptoEditDialog(props) {
   const [assetsToUpdate, setAssetsToUpdate] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(false);
   const [isSuccess, setIsSuccess] = React.useState(false);
+  const [error, setError] = React.useState();
   const [allAssetsDeleted, setAllAssetsDeleted] = React.useState(false);
 
   React.useEffect(() => {
@@ -42,6 +43,7 @@ export default function CryptoEditDialog(props) {
     props.setOpenEditDialog(false);
     setIsSuccess(false);
     setIsLoading(false);
+    setError();
     setAllAssetsDeleted(false);
   };
 
@@ -68,8 +70,11 @@ export default function CryptoEditDialog(props) {
   };
 
   const handleAmountChange = (cryptoName, amount) => {
-    if (amount < 0) {
+    if (amount <= 0) {
       amount = 0;
+      setError("Amount must be greater than zero")
+    } else {
+      setError()
     }
 
     const newAssets = [...assetsToUpdate]
@@ -86,6 +91,7 @@ export default function CryptoEditDialog(props) {
 
   const handleUpdateAssets = () => {
     setIsLoading(true);
+    setError()
     
     const requests = []
     
@@ -109,6 +115,12 @@ export default function CryptoEditDialog(props) {
       .catch(err => {
         setIsLoading(false);
         setIsSuccess(false);
+
+        if (err.response && err.response.data && err.response.data.error) {
+          setError(err.response.data.error)
+        } else {
+          setError(err.message)
+        }
       });
   };
 
@@ -145,6 +157,9 @@ export default function CryptoEditDialog(props) {
                       InputLabelProps={{
                         shrink: true,
                       }}
+                      inputProps={{
+                        step: "0.1"
+                      }}
                       onChange={(event) => handleAmountChange(a.CryptoName, parseFloat(event.target.value))}
                     />
                   </Grid>
@@ -157,6 +172,7 @@ export default function CryptoEditDialog(props) {
           {allAssetsDeleted && !isSuccess && 
             "All cryptos in your assets were marked for deletion. Click 'Apply' to confirm the deletion, or 'Cancel' for aborting it"
           }
+          {error && <ErrorText error={error} />}
           {isLoading && <ProgressIcon />}
           {isSuccess && <SuccessDialog message={"Successfully updated Assets"} />}
         </DialogContent>
