@@ -2,10 +2,10 @@ import React from "react";
 
 import Box from "@mui/material/Box";
 
-import LoginDialog from "./../register_login/LoginDialog";
-import RegisterDialog from "./../register_login/RegisterDialog";
+import LoginDialog from "../LoginDialog/LoginDialog";
+import RegisterDialog from "../RegisterDialog/RegisterDialog";
 
-import Image from "./../logo.png";
+import Image from "../logo.png";
 
 function LandingPage(props) {
   return (
