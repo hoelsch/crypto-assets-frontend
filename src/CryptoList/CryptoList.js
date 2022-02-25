@@ -1,18 +1,17 @@
-import React from 'react';
-import List from '@material-ui/core/List';
+import React from "react";
 
-import CryptoListItem from './CryptoListItem.js';
+import List from "@material-ui/core/List";
+
+import CryptoListItem from "./CryptoListItem";
 
 function CryptoList(props) {
   return (
     <List>
-      {
-        props.assets.map((a) =>
-          <CryptoListItem asset={a} />
-        )
-      }
+      {props.assets.map((a) => (
+        <CryptoListItem asset={a} />
+      ))}
     </List>
-  )
+  );
 }
 
 export default CryptoList;
