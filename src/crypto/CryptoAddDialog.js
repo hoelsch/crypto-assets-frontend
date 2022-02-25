@@ -17,8 +17,8 @@ import ErrorText from '../ErrorText/ErrorText';
 
 export default function CryptoAddDialog(props) {
   const [supportedCryptos, setSupportedCryptos] = React.useState([]);
-  const [cryptoType, setCryptoType] = React.useState("");
-  const [amount, setAmount] = React.useState(1);
+  const [cryptoType, setCryptoType] = React.useState("bitcoin");
+  const [amount, setAmount] = React.useState("1.0");
   const [isLoading, setIsLoading] = React.useState(false);
   const [isSuccess, setIsSuccess] = React.useState(false);
   const [error, setError] = React.useState();
@@ -34,10 +34,17 @@ export default function CryptoAddDialog(props) {
     setIsSuccess(false);
     setIsLoading(false);
     setError();
+    setCryptoType("bitcoin");
+    setAmount("1.0")
   };
 
   const handleAdd = () => {
+    if (amount == 0) {
+      return
+    }
+    
     setIsLoading(true);
+    setError()
     
     axios.post('http://localhost:8080/assets/' + cryptoType, {amount: amount}, config)
       .then(() => {
@@ -48,7 +55,12 @@ export default function CryptoAddDialog(props) {
       .catch(err => {
         setIsLoading(false);
         setIsSuccess(false);
-        setError(err.message);
+        
+        if (err.response && err.response.data && err.response.data.error) {
+          setError(err.response.data.error)
+        } else {
+          setError(err.message)
+        }
       });
   };
 
@@ -60,6 +72,12 @@ export default function CryptoAddDialog(props) {
     if (event.target.value < 0) {
       event.target.value = 0;
     } 
+
+    if (event.target.value == 0) {
+      setError("Amount must be greater than zero")
+    } else {
+      setError()
+    }
 
     setAmount(parseFloat(event.target.value));
   };
@@ -88,6 +106,9 @@ export default function CryptoAddDialog(props) {
                 margin="normal"
                 InputLabelProps={{
                   shrink: true,
+                }}
+                inputProps={{
+                  step: "0.1"
                 }}
                 onChange={handleAmountChange}
               />
