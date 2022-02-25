@@ -18,10 +18,10 @@ function App() {
   };
 
   if (jwt) {
-    return <CryptoMainPage token={jwt} handleClickLogut={handleClickLogout} />;
+    return <CryptoMainPage token={jwt} handleClickLogout={handleClickLogout} />;
   }
 
-  return <LandingPage handleLoginSuccess={handleLoginSuccess}/>;
+  return <LandingPage handleLoginSuccess={handleLoginSuccess} />;
 }
 
 export default App;
