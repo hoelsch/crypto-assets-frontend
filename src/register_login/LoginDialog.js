@@ -19,14 +19,17 @@ export default function LoginDialog(props) {
   const [isLoading, setIsLoading] = React.useState(false);
   const [isSuccess, setIsSuccess] = React.useState(false);
 
-  var userMail;
-  var userPassword;
+  const [userPassword, setUserPassword] = React.useState("");
+  const [userMail, setUserMail] = React.useState("");
 
   const handleClickOpen = () => {
     setError();
     setIsLoading(false)
     setIsSuccess(false)
     setOpen(true);
+
+    setUserMail("")
+    setUserPassword("")
   };
 
   const handleClose = () => {
@@ -37,6 +40,7 @@ export default function LoginDialog(props) {
     const user = {mail: userMail, password: userPassword};
 
     setIsLoading(true)
+    setError()
 
     // TODO: make URL configurable
     axios.post('http://localhost:8080/login', user)
@@ -51,7 +55,12 @@ export default function LoginDialog(props) {
         .catch(err => {
           setIsLoading(false);
           setIsSuccess(false);
-          setError(err.message);
+          
+          if (err.response && err.response.data && err.response.data.error) {
+            setError(err.response.data.error)
+          } else {
+            setError(err.message)
+          }
         });
   };
 
@@ -70,7 +79,7 @@ export default function LoginDialog(props) {
                 type="email"
                 fullWidth
                 variant="standard"
-                onInput={e => userMail = e.target.value}
+                onInput={e => setUserMail(e.target.value)}
               />
               <TextField
                 margin="dense"
@@ -79,7 +88,7 @@ export default function LoginDialog(props) {
                 type="password"
                 fullWidth
                 variant="standard"
-                onInput={e => userPassword = e.target.value}
+                onInput={e => setUserPassword(e.target.value)}
               />
             </>
           }
