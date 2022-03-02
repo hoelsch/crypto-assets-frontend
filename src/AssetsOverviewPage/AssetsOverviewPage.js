@@ -2,25 +2,18 @@ import React from "react";
 
 import axios from "axios";
 
-import AddIcon from "@mui/icons-material/Add";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import EditIcon from "@mui/icons-material/Edit";
-import Fab from "@mui/material/Fab";
 import Grid from "@mui/material/Grid";
-import { makeStyles } from "@mui/styles";
 
 import { PieChart } from "react-minimal-pie-chart";
+
+import AddButton from "./AddButton";
+import EditButton from "./EditButton";
 
 import CryptoList from "./../CryptoList/CryptoList";
 import CryptoAddDialog from "./../CryptoAddDialog/CryptoAddDialog";
 import CryptoEditDialog from "./../CryptoEditDialog/CryptoEditDialog";
-
-const secondaryButtonStyle = makeStyles({
-  root: {
-    background: "#03DAC6",
-  },
-});
 
 function AssetsOverviewPage(props) {
   const [openAddDialog, setOpenAddDialog] = React.useState(false);
@@ -28,8 +21,6 @@ function AssetsOverviewPage(props) {
   const [assets, setAssets] = React.useState([]);
   const [showEmtpyAssetsMessage, setShowEmtpyAssetsMessage] =
     React.useState(false);
-
-  const secondaryButton = secondaryButtonStyle();
 
   const config = {
     headers: {
@@ -173,32 +164,11 @@ function AssetsOverviewPage(props) {
             p={1}
           >
             <Grid item>
-              <Fab
-                sx={{
-                  background: "#BB86FC",
-                  "&:hover": { background: "#BB86FC" },
-                  "&:active": { background: "rgb(187,134,252,0.4)" },
-                }}
-                aria-label="add"
-                onClick={() => setOpenAddDialog(true)}
-              >
-                <AddIcon />
-              </Fab>
+              <AddButton openAddDialog={setOpenAddDialog}/>
             </Grid>
             {!showEmtpyAssetsMessage && assets.length > 0 && (
               <Grid item>
-                <Fab
-                  sx={{
-                    background: "#03DAC6",
-                    "&:hover": { background: "#03DAC6" },
-                    "&:active": { background: "rgb(3,218,198,0.4)" },
-                  }}
-                  className={secondaryButton.root}
-                  aria-label="edit"
-                  onClick={() => setOpenEditDialog(true)}
-                >
-                  <EditIcon />
-                </Fab>
+                <EditButton openEditDialog={setOpenEditDialog}/>
               </Grid>
             )}
           </Grid>
