@@ -3,13 +3,13 @@ import React from "react";
 import axios from "axios";
 
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 
 import { PieChart } from "react-minimal-pie-chart";
 
 import AddButton from "./AddButton";
 import EditButton from "./EditButton";
+import LogoutButton from "./LogoutButton";
 
 import CryptoList from "./../CryptoList/CryptoList";
 import CryptoAddDialog from "./../CryptoAddDialog/CryptoAddDialog";
@@ -145,13 +145,7 @@ function AssetsOverviewPage(props) {
 
   return (
     <>
-      <Button
-        sx={{ p: 1, position: "fixed", top: 35, right: 35 }}
-        variant="text"
-        onClick={props.handleClickLogout}
-      >
-        Logout
-      </Button>
+      <LogoutButton handleClickLogout={props.handleClickLogout} />
       <Box p={4}>
         <Grid container>
           <Grid
