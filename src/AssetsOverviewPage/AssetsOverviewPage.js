@@ -5,11 +5,11 @@ import axios from "axios";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 
-import { PieChart } from "react-minimal-pie-chart";
-
 import AddButton from "./AddButton";
 import EditButton from "./EditButton";
 import LogoutButton from "./LogoutButton";
+
+import AssetsPieChart from "./AssetsPieChart";
 
 import CryptoList from "./../CryptoList/CryptoList";
 import CryptoAddDialog from "./../CryptoAddDialog/CryptoAddDialog";
@@ -105,34 +105,6 @@ function AssetsOverviewPage(props) {
       });
   };
 
-  const getTotalAssetBalance = () => {
-    let total = 0;
-
-    for (let i = 0; i < assets.length; i++) {
-      total += parseFloat(assets[i].TotalPrice);
-    }
-
-    return total.toFixed(2);
-  };
-
-  const getPieChartContent = () => {
-    if (assets.length === 0) {
-      return;
-    }
-
-    let content = [];
-
-    for (let i = 0; i < assets.length; i++) {
-      content.push({
-        title: assets[i].Abbreviation,
-        value: parseInt(assets[i].TotalPrice),
-        color: assets[i].Color,
-      });
-    }
-
-    return content;
-  };
-
   const getCopyOfAssetsForEdit = () => {
     const assetsCopy = [];
     for (let i = 0; i < assets.length; i++) {
@@ -158,11 +130,11 @@ function AssetsOverviewPage(props) {
             p={1}
           >
             <Grid item>
-              <AddButton openAddDialog={setOpenAddDialog}/>
+              <AddButton openAddDialog={setOpenAddDialog} />
             </Grid>
             {!showEmtpyAssetsMessage && assets.length > 0 && (
               <Grid item>
-                <EditButton openEditDialog={setOpenEditDialog}/>
+                <EditButton openEditDialog={setOpenEditDialog} />
               </Grid>
             )}
           </Grid>
@@ -173,20 +145,7 @@ function AssetsOverviewPage(props) {
             justifyContent="center"
             alignItems="center"
           >
-            <PieChart
-              style={{ height: "200px", marginBottom: "30px" }}
-              lineWidth={20}
-              data={getPieChartContent()}
-              label={() => {
-                let total = getTotalAssetBalance();
-                return "€" + total;
-              }}
-              labelPosition={0}
-              labelStyle={{
-                fontSize: "10px",
-                fill: "rgb(50,61,73)",
-              }}
-            />
+            <AssetsPieChart assets={assets} />
             <CryptoList assets={assets} />
             {showEmtpyAssetsMessage && (
               <Box
