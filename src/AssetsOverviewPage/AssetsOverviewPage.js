@@ -10,10 +10,13 @@ import EditButton from "./EditButton";
 import LogoutButton from "./LogoutButton";
 
 import AssetsPieChart from "./AssetsPieChart";
+import EmptyAssetsInfo from "./EmptyAssetsInfo";
 
 import CryptoList from "./../CryptoList/CryptoList";
 import CryptoAddDialog from "./../CryptoAddDialog/CryptoAddDialog";
 import CryptoEditDialog from "./../CryptoEditDialog/CryptoEditDialog";
+
+import getAuthHeaderConfig from "../Authorization/Authorization";
 
 function AssetsOverviewPage(props) {
   const [openAddDialog, setOpenAddDialog] = React.useState(false);
@@ -22,11 +25,7 @@ function AssetsOverviewPage(props) {
   const [showEmtpyAssetsMessage, setShowEmtpyAssetsMessage] =
     React.useState(false);
 
-  const config = {
-    headers: {
-      Authorization: "Bearer " + props.token,
-    },
-  };
+  const config = getAuthHeaderConfig(props.token)
 
   React.useEffect(() => {
     if (assets.length > 0) {
@@ -147,23 +146,7 @@ function AssetsOverviewPage(props) {
           >
             <AssetsPieChart assets={assets} />
             <CryptoList assets={assets} />
-            {showEmtpyAssetsMessage && (
-              <Box
-                sx={{
-                  height: 100,
-                  width: 350,
-                  backgroundColor: "white",
-                  ml: "auto",
-                  mr: "auto",
-                  textAlign: "center",
-                  p: 10,
-                  borderRadius: 8,
-                }}
-              >
-                <h2>No Crypto added to Assets yet</h2>
-                Press top left Button to add Crypto
-              </Box>
-            )}
+            {showEmtpyAssetsMessage && <EmptyAssetsInfo />}
           </Grid>
         </Grid>
       </Box>
