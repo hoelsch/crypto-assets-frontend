@@ -25,7 +25,7 @@ function AssetsOverviewPage(props) {
   const [showEmtpyAssetsMessage, setShowEmtpyAssetsMessage] =
     React.useState(false);
 
-  const config = getAuthHeaderConfig(props.token)
+  const config = getAuthHeaderConfig(props.token);
 
   React.useEffect(() => {
     if (assets.length > 0) {
@@ -40,20 +40,21 @@ function AssetsOverviewPage(props) {
       .get("http://localhost:8080/assets", config)
       .then((response) => {
         const assetsFromServer = response.data.assets;
+        
         if (assetsFromServer && assetsFromServer.length > 0) {
           setShowEmtpyAssetsMessage(false);
           fetchCrypoPrices(assetsFromServer);
-        } else {
-          if (assets.length > 0) {
-            setAssets([]);
-          }
 
-          setShowEmtpyAssetsMessage(true);
+          return;
         }
-        console.log("called fetch assets");
+
+        if (assets.length > 0) {
+          setAssets([]);
+        }
+
+        setShowEmtpyAssetsMessage(true);
       })
       .catch((err) => {
-        console.log(err);
         // TODO: implement error handling
       });
   };
