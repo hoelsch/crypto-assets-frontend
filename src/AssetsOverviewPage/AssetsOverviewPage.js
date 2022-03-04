@@ -4,18 +4,15 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 
 import AddButton from "./AddButton";
-import EditButton from "./EditButton";
-import LogoutButton from "./LogoutButton";
-
 import AssetsPieChart from "./AssetsPieChart";
-import EmptyAssetsInfo from "./EmptyAssetsInfo";
-
 import CryptoList from "./../CryptoList/CryptoList";
 import CryptoAddDialog from "./../CryptoAddDialog/CryptoAddDialog";
 import CryptoEditDialog from "./../CryptoEditDialog/CryptoEditDialog";
-
-import getAuthHeaderConfig from "../Authorization/Authorization";
+import EditButton from "./EditButton";
+import EmptyAssetsInfo from "./EmptyAssetsInfo";
 import fetchAssets from "./FetchAssets";
+import getAuthHeaderConfig from "../Authorization/Authorization";
+import LogoutButton from "./LogoutButton";
 
 function AssetsOverviewPage(props) {
   const [openAddDialog, setOpenAddDialog] = React.useState(false);
@@ -28,7 +25,7 @@ function AssetsOverviewPage(props) {
 
   const fetchAssetsFromServer = () =>
     fetchAssets(
-      "http://localhost:8080/assets",
+      "http://localhost:8080/assets", // TODO: make url configurable
       config,
       assets,
       setAssets,
