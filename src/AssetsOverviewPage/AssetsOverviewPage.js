@@ -18,7 +18,7 @@ function AssetsOverviewPage(props) {
   const [openAddDialog, setOpenAddDialog] = React.useState(false);
   const [openEditDialog, setOpenEditDialog] = React.useState(false);
   const [assets, setAssets] = React.useState([]);
-  const [showEmtpyAssetsMessage, setShowEmtpyAssetsMessage] =
+  const [showEmtpyAssetsInfo, setShowEmtpyAssetsInfo] =
     React.useState(false);
 
   const config = getAuthHeaderConfig(props.token);
@@ -29,7 +29,7 @@ function AssetsOverviewPage(props) {
       config,
       assets,
       setAssets,
-      setShowEmtpyAssetsMessage
+      setShowEmtpyAssetsInfo
     );
 
   React.useEffect(() => {
@@ -57,7 +57,7 @@ function AssetsOverviewPage(props) {
             <Grid item>
               <AddButton openAddDialog={setOpenAddDialog} />
             </Grid>
-            {!showEmtpyAssetsMessage && assets.length > 0 && (
+            {!showEmtpyAssetsInfo && assets.length > 0 && (
               <Grid item>
                 <EditButton openEditDialog={setOpenEditDialog} />
               </Grid>
@@ -72,7 +72,7 @@ function AssetsOverviewPage(props) {
           >
             <AssetsPieChart assets={assets} />
             <CryptoList assets={assets} />
-            {showEmtpyAssetsMessage && <EmptyAssetsInfo />}
+            {showEmtpyAssetsInfo && <EmptyAssetsInfo />}
           </Grid>
         </Grid>
       </Box>
