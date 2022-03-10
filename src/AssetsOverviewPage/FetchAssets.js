@@ -32,15 +32,15 @@ function fetchAssets(
 }
 
 function getCryptoInfoForAsset(asset, cryptoInfos) {
-  let expectedSymbol = asset.Abbreviation + "EUR";
+  const expectedSymbol = asset.Abbreviation + "EUR";
   
-  for (let i = 0; i < cryptoInfos.length; i++) {
-    let symbol = cryptoInfos[i]["symbol"];
+  for (const info of cryptoInfos) {
+    const symbol = info["symbol"];
+    
     if (symbol === expectedSymbol) {
-      return cryptoInfos[i]
+      return info
     }
   }
-
   // TODO: handle error when no crypto info found for asset
 }
 
@@ -58,25 +58,35 @@ function setColorFor(fetchedAssets) {
   }
 }
 
+function updateAssetPrice(asset, cryptoInfos) {
+  const info = getCryptoInfoForAsset(asset, cryptoInfos)
+  const currentPrice = parseFloat(info["price"]);
+  
+  const amount = parseFloat(asset.Amount);
+  const totalPrice = amount * currentPrice;
+
+  asset["CurrentPrice"] = currentPrice;
+  asset["TotalPrice"] = totalPrice.toFixed(2);
+}
+
+function getTotalBalance(assets) {
+  let total = 0;
+  for (const asset of assets) {
+    total += parseFloat(asset.TotalPrice);
+  }
+
+  return total
+}
+
 function updateAssetsWithCurrentCryptoPrices(fetchedAssets, setAssets) {
   axios.get("https://api.binance.com/api/v3/ticker/price").then((response) => {
     const cryptoInfos = response.data;
 
     for (let asset of fetchedAssets) {
-      const info = getCryptoInfoForAsset(asset, cryptoInfos)
-      const currentPrice = parseFloat(info["price"]);
-      
-      const amount = parseFloat(asset.Amount);
-      const totalPrice = amount * currentPrice;
-
-      asset["CurrentPrice"] = currentPrice;
-      asset["TotalPrice"] = totalPrice.toFixed(2);
+      updateAssetPrice(asset, cryptoInfos)
     }
 
-    let total = 0;
-    for (let i = 0; i < fetchedAssets.length; i++) {
-      total += parseFloat(fetchedAssets[i].TotalPrice);
-    }
+    const total = getTotalBalance(fetchedAssets)
 
     for (let i = 0; i < fetchedAssets.length; i++) {
       fetchedAssets[i]["PercentageAmongAllAssets"] = (
