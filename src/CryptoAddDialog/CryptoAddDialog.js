@@ -1,33 +1,28 @@
-import * as React from 'react';
+import * as React from "react";
 
-import axios from 'axios';
+import axios from "axios";
 
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
-import FormControl from '@mui/material/FormControl';
+import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogTitle from "@mui/material/DialogTitle";
 
-import CryptoTypeSelect from './CryptoTypeSelect';
-import ProgressIcon from '../ProgressIcon/ProgressIcon';
-import SuccessDialog from '../SuccessDialog/SuccessDialog';
-import ErrorText from '../ErrorText/ErrorText';
+import getAuthHeaderConfig from "../Authorization/Authorization";
+import CryptoAddForm from "./CryptoAddForm";
+import ProgressIcon from "../ProgressIcon/ProgressIcon";
+import SuccessDialog from "../SuccessDialog/SuccessDialog";
+import ErrorText from "../ErrorText/ErrorText";
 
-export default function CryptoAddDialog(props) {
+function CryptoAddDialog(props) {
   const [supportedCryptos, setSupportedCryptos] = React.useState([]);
-  const [cryptoType, setCryptoType] = React.useState("bitcoin");
+  const [cryptoType, setCryptoType] = React.useState("bitcoin"); // TODO: rename cryptoType to make consistent with backend naming
   const [amount, setAmount] = React.useState(0.1);
   const [isLoading, setIsLoading] = React.useState(false);
   const [isSuccess, setIsSuccess] = React.useState(false);
   const [error, setError] = React.useState();
-  
-  const config = {
-    headers: {
-       Authorization: "Bearer " + props.token,
-    }
-  };
+
+  const config = getAuthHeaderConfig(props.token);
 
   const handleClose = () => {
     props.setOpenAddDialog(false);
@@ -35,33 +30,26 @@ export default function CryptoAddDialog(props) {
     setIsLoading(false);
     setError();
     setCryptoType("bitcoin");
-    setAmount(0.1)
+    setAmount(0.1);
   };
 
   const handleAdd = () => {
-    if (amount == 0) {
-      return
+    if (amount === 0) {
+      return;
     }
-    
+
     setIsLoading(true);
-    setError()
-    
-    axios.post('http://localhost:8080/assets/' + cryptoType, {amount: amount}, config)
-      .then(() => {
-        setIsLoading(false);
-        setIsSuccess(true);
-        props.fetchAssets();
-      })
-      .catch(err => {
-        setIsLoading(false);
-        setIsSuccess(false);
-        
-        if (err.response && err.response.data && err.response.data.error) {
-          setError(err.response.data.error)
-        } else {
-          setError(err.message)
-        }
-      });
+    setError();
+
+    addCryptoToAssets(
+      cryptoType,
+      amount,
+      config,
+      props.fetchAssets,
+      setIsLoading,
+      setIsSuccess,
+      setError
+    );
   };
 
   const handleCryptoTypeChange = (event) => {
@@ -71,81 +59,111 @@ export default function CryptoAddDialog(props) {
   const handleAmountChange = (event) => {
     if (event.target.value < 0) {
       event.target.value = 0;
-    } 
+    }
 
-    if (event.target.value == 0) {
-      setError("Amount must be greater than zero")
+    if (event.target.value === 0) {
+      setError("Amount must be greater than zero");
     } else {
-      setError()
+      setError();
     }
 
     setAmount(parseFloat(event.target.value));
   };
 
-  if (supportedCryptos.length == 0) {
+  if (supportedCryptos.length === 0) {
     fetchSupportedCryptos(setSupportedCryptos, setError, config);
   }
-  
+
   return (
     <>
-      <Dialog open={props.open} onClose={handleClose} fullWidth={true} maxWidth={"xs"}>
-      {!isSuccess && <DialogTitle>Add Crypto to your Assets</DialogTitle>}
+      <Dialog
+        open={props.open}
+        onClose={handleClose}
+        fullWidth={true}
+        maxWidth={"xs"}
+      >
+        {!isSuccess && <DialogTitle>Add Crypto to your Assets</DialogTitle>}
         <DialogContent>
-          { !isSuccess &&
-            <FormControl sx={{ minWidth: 150, m: 2}}>
-              <CryptoTypeSelect 
-                supportedCryptos={supportedCryptos}
-                selectedCryptoType={cryptoType}
-                handleCryptoTypeChange={handleCryptoTypeChange}
-              />
-              <TextField
-                id="outlined-number"
-                label="Amount"
-                value={amount}
-                type="number"
-                margin="normal"
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                inputProps={{
-                  step: "0.1"
-                }}
-                onChange={handleAmountChange}
-              />
-            </FormControl>
-          }
+          {!isSuccess && (
+            <CryptoAddForm
+              supportedCryptos={supportedCryptos}
+              cryptoType={cryptoType}
+              handleCryptoTypeChange={handleCryptoTypeChange}
+              amount={amount}
+              handleAmountChange={handleAmountChange}
+            />
+          )}
           {error && <ErrorText error={error} />}
           {isLoading && <ProgressIcon />}
-          {isSuccess && <SuccessDialog message={"Successfully added " + cryptoType + " to Assets"} />}
+          {isSuccess && (
+            <SuccessDialog
+              message={"Successfully added " + cryptoType + " to Assets"}
+            />
+          )}
         </DialogContent>
         <DialogActions>
           {isSuccess && <Button onClick={handleClose}>Close</Button>}
-          {!isSuccess &&
+          {!isSuccess && (
             <>
               <Button onClick={handleClose}>Cancel</Button>
               <Button onClick={handleAdd}>Add</Button>
             </>
-          }
+          )}
         </DialogActions>
       </Dialog>
     </>
-  )
+  );
+}
+
+function addCryptoToAssets(
+  cryptoType,
+  amount,
+  config,
+  fetchAssets,
+  setIsLoading,
+  setIsSuccess,
+  setError
+) {
+  axios
+    .post(
+      "http://localhost:8080/assets/" + cryptoType,
+      { amount: amount },
+      config
+    )
+    .then(() => {
+      setIsLoading(false);
+      setIsSuccess(true);
+      fetchAssets();
+    })
+    .catch((err) => {
+      setIsLoading(false);
+      setIsSuccess(false);
+
+      if (err.response && err.response.data && err.response.data.error) {
+        setError(err.response.data.error);
+      } else {
+        setError(err.message);
+      }
+    });
 }
 
 function fetchSupportedCryptos(setSupportedCryptos, setError, config) {
-  axios.get('http://localhost:8080/cryptos', config)
+  axios
+    .get("http://localhost:8080/cryptos", config)
     .then((response) => {
-      const responseData = response.data["cryptos"]
-      const cryptos = []
+      const responseData = response.data["cryptos"];
+      const cryptos = [];
 
       for (let i = 0; i < responseData.length; i++) {
         const crypto = responseData[i];
-        cryptos.push(crypto["Name"])
+        cryptos.push(crypto["Name"]);
       }
 
-      setSupportedCryptos(cryptos)
+      setSupportedCryptos(cryptos);
     })
-    .catch(err => {
+    .catch((err) => {
       setError(err.message);
     });
 }
+
+export default CryptoAddDialog;
