@@ -44,7 +44,6 @@ function getCryptoInfoForAsset(asset, cryptoInfos) {
       return info;
     }
   }
-  // TODO: handle error when no crypto info found for asset
 }
 
 // TODO: move this function to a different location;
