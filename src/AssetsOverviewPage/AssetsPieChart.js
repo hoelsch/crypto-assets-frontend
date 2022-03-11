@@ -13,7 +13,7 @@ function AssetsPieChart(props) {
       style={style}
       lineWidth={20}
       data={data}
-      label={totalBalanceEuro}
+      label={() => totalBalanceEuro}
       labelPosition={0}
       labelStyle={labelStyle}
     />
