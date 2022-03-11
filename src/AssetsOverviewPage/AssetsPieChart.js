@@ -3,50 +3,45 @@ import React from "react";
 import { PieChart } from "react-minimal-pie-chart";
 
 function AssetsPieChart(props) {
-  const getPieChartContent = () => {
-    if (props.assets.length === 0) {
-      return;
-    }
-
-    let content = [];
-
-    for (let i = 0; i < props.assets.length; i++) {
-      content.push({
-        title: props.assets[i].Abbreviation,
-        value: parseInt(props.assets[i].TotalPrice),
-        color: props.assets[i].Color,
-      });
-    }
-
-    return content;
-  };
-
-  const getTotalAssetBalance = () => {
-    let total = 0;
-
-    for (let i = 0; i < props.assets.length; i++) {
-      total += parseFloat(props.assets[i].TotalPrice);
-    }
-
-    return total.toFixed(2);
-  };
+  const style = { height: "200px", marginBottom: "30px" };
+  const labelStyle = { fontSize: "10px", fill: "rgb(50,61,73)" };
+  const data = getPieChartContent(props.assets);
+  const totalBalanceEuro = "€" + getTotalAssetBalance(props.assets);
 
   return (
     <PieChart
-      style={{ height: "200px", marginBottom: "30px" }}
+      style={style}
       lineWidth={20}
-      data={getPieChartContent()}
-      label={() => {
-        let total = getTotalAssetBalance();
-        return "€" + total;
-      }}
+      data={data}
+      label={totalBalanceEuro}
       labelPosition={0}
-      labelStyle={{
-        fontSize: "10px",
-        fill: "rgb(50,61,73)",
-      }}
+      labelStyle={labelStyle}
     />
   );
+}
+
+function getPieChartContent(assets) {
+  const content = [];
+
+  for (let asset of assets) {
+    content.push({
+      title: asset.Abbreviation,
+      value: parseInt(asset.TotalPrice),
+      color: asset.Color,
+    });
+  }
+
+  return content;
+}
+
+function getTotalAssetBalance(assets) {
+  let total = 0;
+
+  for (let asset of assets) {
+    total += parseFloat(asset.TotalPrice);
+  }
+
+  return total.toFixed(2);
 }
 
 export default AssetsPieChart;
