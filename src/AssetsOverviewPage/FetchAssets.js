@@ -34,52 +34,6 @@ function fetchAssets(
     });
 }
 
-function getCryptoInfoForAsset(asset, cryptoInfos) {
-  const expectedSymbol = asset.Abbreviation + "EUR";
-
-  for (const info of cryptoInfos) {
-    const symbol = info["symbol"];
-
-    if (symbol === expectedSymbol) {
-      return info;
-    }
-  }
-}
-
-// TODO: move this function to a different location;
-//       it could be confusing if the color how a crypto asset is displayed is set in this file
-function setColorFor(fetchedAssets) {
-  const colors = {
-    bitcoin: "rgb(98,215,198)",
-    ethereum: "rgb(178,139,245)",
-    cardano: "#CF6679",
-  };
-
-  for (let asset of fetchedAssets) {
-    asset["Color"] = colors[asset.CryptoName];
-  }
-}
-
-function updateAssetPrice(asset, cryptoInfos) {
-  const info = getCryptoInfoForAsset(asset, cryptoInfos);
-  const currentPrice = parseFloat(info["price"]);
-
-  const amount = parseFloat(asset.Amount);
-  const totalPrice = amount * currentPrice;
-
-  asset["CurrentPrice"] = currentPrice;
-  asset["TotalPrice"] = totalPrice.toFixed(2);
-}
-
-function getTotalBalance(assets) {
-  let total = 0;
-  for (const asset of assets) {
-    total += parseFloat(asset.TotalPrice);
-  }
-
-  return total;
-}
-
 function updateAssetsWithCurrentCryptoPrices(fetchedAssets, setAssets) {
   axios.get("https://api.binance.com/api/v3/ticker/price").then((response) => {
     const cryptoInfos = response.data;
@@ -99,6 +53,52 @@ function updateAssetsWithCurrentCryptoPrices(fetchedAssets, setAssets) {
 
     setAssets(fetchedAssets);
   });
+}
+
+function updateAssetPrice(asset, cryptoInfos) {
+  const info = getCryptoInfoForAsset(asset, cryptoInfos);
+  const currentPrice = parseFloat(info["price"]);
+
+  const amount = parseFloat(asset.Amount);
+  const totalPrice = amount * currentPrice;
+
+  asset["CurrentPrice"] = currentPrice;
+  asset["TotalPrice"] = totalPrice.toFixed(2);
+}
+
+function getCryptoInfoForAsset(asset, cryptoInfos) {
+  const expectedSymbol = asset.Abbreviation + "EUR";
+
+  for (const info of cryptoInfos) {
+    const symbol = info["symbol"];
+
+    if (symbol === expectedSymbol) {
+      return info;
+    }
+  }
+}
+
+function getTotalBalance(assets) {
+  let total = 0;
+  for (const asset of assets) {
+    total += parseFloat(asset.TotalPrice);
+  }
+
+  return total;
+}
+
+// TODO: move this function to a different location;
+//       it could be confusing if the color how a crypto asset is displayed is set in this file
+function setColorFor(fetchedAssets) {
+  const colors = {
+    bitcoin: "rgb(98,215,198)",
+    ethereum: "rgb(178,139,245)",
+    cardano: "#CF6679",
+  };
+
+  for (let asset of fetchedAssets) {
+    asset["Color"] = colors[asset.CryptoName];
+  }
 }
 
 export default fetchAssets;
