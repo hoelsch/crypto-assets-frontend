@@ -5,11 +5,14 @@ function fetchAssets(
   config,
   assets,
   setAssets,
-  setShowEmtpyAssetsMessage
+  setShowEmtpyAssetsMessage,
+  setError
 ) {
   axios
     .get(url, config)
     .then((response) => {
+      setError(); // request was successful, reset previous error message
+
       const assetsFromServer = response.data.assets;
 
       if (assetsFromServer && assetsFromServer.length > 0) {
@@ -27,18 +30,18 @@ function fetchAssets(
       setShowEmtpyAssetsMessage(true);
     })
     .catch((err) => {
-      // TODO: implement error handling
+      setError("Error: Could not fetch assets. Please refresh the page");
     });
 }
 
 function getCryptoInfoForAsset(asset, cryptoInfos) {
   const expectedSymbol = asset.Abbreviation + "EUR";
-  
+
   for (const info of cryptoInfos) {
     const symbol = info["symbol"];
-    
+
     if (symbol === expectedSymbol) {
-      return info
+      return info;
     }
   }
   // TODO: handle error when no crypto info found for asset
@@ -52,16 +55,16 @@ function setColorFor(fetchedAssets) {
     ethereum: "rgb(178,139,245)",
     cardano: "#CF6679",
   };
-  
+
   for (let asset of fetchedAssets) {
     asset["Color"] = colors[asset.CryptoName];
   }
 }
 
 function updateAssetPrice(asset, cryptoInfos) {
-  const info = getCryptoInfoForAsset(asset, cryptoInfos)
+  const info = getCryptoInfoForAsset(asset, cryptoInfos);
   const currentPrice = parseFloat(info["price"]);
-  
+
   const amount = parseFloat(asset.Amount);
   const totalPrice = amount * currentPrice;
 
@@ -75,7 +78,7 @@ function getTotalBalance(assets) {
     total += parseFloat(asset.TotalPrice);
   }
 
-  return total
+  return total;
 }
 
 function updateAssetsWithCurrentCryptoPrices(fetchedAssets, setAssets) {
@@ -83,14 +86,14 @@ function updateAssetsWithCurrentCryptoPrices(fetchedAssets, setAssets) {
     const cryptoInfos = response.data;
 
     for (let asset of fetchedAssets) {
-      updateAssetPrice(asset, cryptoInfos)
+      updateAssetPrice(asset, cryptoInfos);
     }
 
-    const total = getTotalBalance(fetchedAssets)
+    const totalBalance = getTotalBalance(fetchedAssets);
 
-    for (let i = 0; i < fetchedAssets.length; i++) {
-      fetchedAssets[i]["PercentageAmongAllAssets"] = (
-        (parseFloat(fetchedAssets[i].TotalPrice) / parseFloat(total)) *
+    for (let asset of fetchedAssets) {
+      asset["PercentageAmongAllAssets"] = (
+        (parseFloat(asset.TotalPrice) / parseFloat(totalBalance)) *
         100
       ).toFixed(2);
     }

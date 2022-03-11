@@ -10,6 +10,7 @@ import CryptoAddDialog from "./../CryptoAddDialog/CryptoAddDialog";
 import CryptoEditDialog from "./../CryptoEditDialog/CryptoEditDialog";
 import EditButton from "./EditButton";
 import EmptyAssetsInfo from "./EmptyAssetsInfo";
+import ErrorText from "../ErrorText/ErrorText";
 import fetchAssets from "./FetchAssets";
 import getAuthHeaderConfig from "../Authorization/Authorization";
 import LogoutButton from "./LogoutButton";
@@ -18,8 +19,8 @@ function AssetsOverviewPage(props) {
   const [openAddDialog, setOpenAddDialog] = React.useState(false);
   const [openEditDialog, setOpenEditDialog] = React.useState(false);
   const [assets, setAssets] = React.useState([]);
-  const [showEmtpyAssetsInfo, setShowEmtpyAssetsInfo] =
-    React.useState(false);
+  const [error, setError] = React.useState();
+  const [showEmtpyAssetsInfo, setShowEmtpyAssetsInfo] = React.useState(false);
 
   const config = getAuthHeaderConfig(props.token);
 
@@ -29,7 +30,8 @@ function AssetsOverviewPage(props) {
       config,
       assets,
       setAssets,
-      setShowEmtpyAssetsInfo
+      setShowEmtpyAssetsInfo,
+      setError
     );
 
   React.useEffect(() => {
@@ -73,6 +75,7 @@ function AssetsOverviewPage(props) {
             <AssetsPieChart assets={assets} />
             <CryptoList assets={assets} />
             {showEmtpyAssetsInfo && <EmptyAssetsInfo />}
+            {error && <ErrorText error={error} />}
           </Grid>
         </Grid>
       </Box>
