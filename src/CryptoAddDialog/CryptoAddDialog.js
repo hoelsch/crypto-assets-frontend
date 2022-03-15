@@ -74,6 +74,16 @@ function CryptoAddDialog(props) {
     fetchSupportedCryptos(setSupportedCryptos, setError, config);
   }
 
+  if (isSuccess) {
+    return (
+      <SuccessDialog
+        message={"Successfully added " + cryptoType + " to Assets"}
+        open={props.open}
+        handleClose={handleClose}
+      />
+    );
+  }
+
   return (
     <>
       <Dialog
@@ -82,33 +92,23 @@ function CryptoAddDialog(props) {
         fullWidth={true}
         maxWidth={"xs"}
       >
-        {!isSuccess && <DialogTitle>Add Crypto to your Assets</DialogTitle>}
+        <DialogTitle>Add Crypto to your Assets</DialogTitle>
         <DialogContent>
-          {!isSuccess && (
-            <CryptoAddForm
-              supportedCryptos={supportedCryptos}
-              cryptoType={cryptoType}
-              handleCryptoTypeChange={handleCryptoTypeChange}
-              amount={amount}
-              handleAmountChange={handleAmountChange}
-            />
-          )}
+          <CryptoAddForm
+            supportedCryptos={supportedCryptos}
+            cryptoType={cryptoType}
+            handleCryptoTypeChange={handleCryptoTypeChange}
+            amount={amount}
+            handleAmountChange={handleAmountChange}
+          />
           {error && <ErrorText error={error} />}
           {isLoading && <ProgressIcon />}
-          {isSuccess && (
-            <SuccessDialog
-              message={"Successfully added " + cryptoType + " to Assets"}
-            />
-          )}
         </DialogContent>
         <DialogActions>
-          {isSuccess && <Button onClick={handleClose}>Close</Button>}
-          {!isSuccess && (
-            <>
-              <Button onClick={handleClose}>Cancel</Button>
-              <Button onClick={handleAdd}>Add</Button>
-            </>
-          )}
+          <>
+            <Button onClick={handleClose}>Cancel</Button>
+            <Button onClick={handleAdd}>Add</Button>
+          </>
         </DialogActions>
       </Dialog>
     </>
@@ -154,8 +154,7 @@ function fetchSupportedCryptos(setSupportedCryptos, setError, config) {
       const responseData = response.data["cryptos"];
       const cryptos = [];
 
-      for (let i = 0; i < responseData.length; i++) {
-        const crypto = responseData[i];
+      for (const crypto of responseData) {
         cryptos.push(crypto["Name"]);
       }
 
