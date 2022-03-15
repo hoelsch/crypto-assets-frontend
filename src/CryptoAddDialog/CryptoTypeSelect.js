@@ -1,10 +1,10 @@
-import * as React from 'react';
+import * as React from "react";
 
-import InputLabel from '@mui/material/InputLabel';
-import Select from '@mui/material/Select';
-import MenuItem from '@mui/material/MenuItem';
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
 
-export default function CryptoTypeSelect(props) {
+function CryptoTypeSelect(props) {
   return (
     <>
       <InputLabel id="crypto-type-select-label">Type</InputLabel>
@@ -18,17 +18,21 @@ export default function CryptoTypeSelect(props) {
         {getCryptoTypeList(props.supportedCryptos)}
       </Select>
     </>
-  )
+  );
 }
 
 function getCryptoTypeList(supportedCryptos) {
-  const cryptoTypes = []
+  const cryptoTypes = [];
 
   for (let i = 0; i < supportedCryptos.length; i++) {
     cryptoTypes.push(
-      <MenuItem key={i} sx={{display: "block"}} value={supportedCryptos[i]}>{supportedCryptos[i]}</MenuItem>
+      <MenuItem key={i} sx={{ display: "block" }} value={supportedCryptos[i]}>
+        {supportedCryptos[i]}
+      </MenuItem>
     );
   }
-    
-  return cryptoTypes
+
+  return cryptoTypes;
 }
+
+export default CryptoTypeSelect;
