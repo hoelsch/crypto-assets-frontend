@@ -3,22 +3,15 @@ import * as React from "react";
 import axios from "axios";
 
 import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import DeleteIcon from "@mui/icons-material/Delete";
-import IconButton from "@mui/material/IconButton";
-
-import Paper from "@mui/material/Paper";
-import Grid from "@mui/material/Grid";
 
 import ProgressIcon from "../ProgressIcon/ProgressIcon";
 import SuccessDialog from "../SuccessDialog/SuccessDialog";
 import ErrorText from "../ErrorText/ErrorText";
+import CryptoEditForm from "./CryptoEditForm";
 
 export default function CryptoEditDialog(props) {
   const [assetsToUpdate, setAssetsToUpdate] = React.useState([]);
@@ -151,53 +144,11 @@ export default function CryptoEditDialog(props) {
       >
         <DialogTitle>Edit your Assets</DialogTitle>
         <DialogContent>
-          <List>
-            {assetsToUpdate
-              .filter((a) => !("Deleted" in a))
-              .map((a) => (
-                <ListItem
-                  secondaryAction={
-                    <IconButton
-                      onClick={() => handleAssetDelete(a.CryptoName)}
-                      edge="end"
-                      aria-label="delete"
-                    >
-                      <DeleteIcon />
-                    </IconButton>
-                  }
-                >
-                  <Grid container spacing={2}>
-                    <Grid item xs={4}>
-                      <Paper elevation={0} sx={{ mt: 4 }}>
-                        {a.CryptoName}
-                      </Paper>
-                    </Grid>
-                    <Grid item xs={8}>
-                      <TextField
-                        sx={{ width: 150 }}
-                        id="outlined-number"
-                        label="Amount"
-                        value={a.Amount}
-                        type="number"
-                        margin="normal"
-                        InputLabelProps={{
-                          shrink: true,
-                        }}
-                        inputProps={{
-                          step: "0.1",
-                        }}
-                        onChange={(event) =>
-                          handleAmountChange(
-                            a.CryptoName,
-                            parseFloat(event.target.value)
-                          )
-                        }
-                      />
-                    </Grid>
-                  </Grid>
-                </ListItem>
-              ))}
-          </List>
+          <CryptoEditForm
+            assetsToUpdate={assetsToUpdate}
+            handleAssetDelete={handleAssetDelete}
+            handleAmountChange={handleAmountChange}
+          />
           {allAssetsDeleted &&
             "All cryptos in your assets were marked for deletion. Click 'Apply' to confirm the deletion, or 'Cancel' for aborting it"}
           {error && <ErrorText error={error} />}
