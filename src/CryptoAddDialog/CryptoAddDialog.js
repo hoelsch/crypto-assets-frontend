@@ -1,7 +1,5 @@
 import * as React from "react";
 
-import axios from "axios";
-
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -11,6 +9,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import getAuthHeaderConfig from "../Authorization/Authorization";
 import CryptoAddForm from "./CryptoAddForm";
 import ProgressIcon from "../ProgressIcon/ProgressIcon";
+import {addCryptoToAssets, fetchSupportedCryptos} from "./Request";
 import SuccessDialog from "../SuccessDialog/SuccessDialog";
 import ErrorText from "../ErrorText/ErrorText";
 
@@ -113,56 +112,6 @@ function CryptoAddDialog(props) {
       </Dialog>
     </>
   );
-}
-
-function addCryptoToAssets(
-  cryptoType,
-  amount,
-  config,
-  fetchAssets,
-  setIsLoading,
-  setIsSuccess,
-  setError
-) {
-  axios
-    .post(
-      "http://localhost:8080/assets/" + cryptoType,
-      { amount: amount },
-      config
-    )
-    .then(() => {
-      setIsLoading(false);
-      setIsSuccess(true);
-      fetchAssets();
-    })
-    .catch((err) => {
-      setIsLoading(false);
-      setIsSuccess(false);
-
-      if (err.response && err.response.data && err.response.data.error) {
-        setError(err.response.data.error);
-      } else {
-        setError(err.message);
-      }
-    });
-}
-
-function fetchSupportedCryptos(setSupportedCryptos, setError, config) {
-  axios
-    .get("http://localhost:8080/cryptos", config)
-    .then((response) => {
-      const responseData = response.data["cryptos"];
-      const cryptos = [];
-
-      for (const crypto of responseData) {
-        cryptos.push(crypto["Name"]);
-      }
-
-      setSupportedCryptos(cryptos);
-    })
-    .catch((err) => {
-      setError(err.message);
-    });
 }
 
 export default CryptoAddDialog;
