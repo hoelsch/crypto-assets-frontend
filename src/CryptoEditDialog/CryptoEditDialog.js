@@ -13,6 +13,8 @@ import SuccessDialog from "../SuccessDialog/SuccessDialog";
 import ErrorText from "../ErrorText/ErrorText";
 import CryptoEditForm from "./CryptoEditForm";
 
+import getAuthHeaderConfig from "../Authorization/Authorization";
+
 export default function CryptoEditDialog(props) {
   const [assetsToUpdate, setAssetsToUpdate] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(false);
@@ -22,13 +24,9 @@ export default function CryptoEditDialog(props) {
 
   React.useEffect(() => {
     setAssetsToUpdate(props.assets);
-  });
+  }, [props.assets]);
 
-  const config = {
-    headers: {
-      Authorization: "Bearer " + props.token,
-    },
-  };
+  const config = getAuthHeaderConfig(props.token);
 
   const handleClose = () => {
     props.setOpenEditDialog(false);
