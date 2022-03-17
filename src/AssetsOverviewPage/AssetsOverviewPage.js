@@ -89,7 +89,7 @@ function AssetsOverviewPage(props) {
         open={openEditDialog}
         setOpenEditDialog={setOpenEditDialog}
         fetchAssets={fetchAssetsFromServer}
-        assets={Array.from(assets)}
+        assets={JSON.parse(JSON.stringify(assets))}
         token={props.token}
       />
     </>

@@ -16,14 +16,16 @@ import CryptoEditForm from "./CryptoEditForm";
 import getAuthHeaderConfig from "../Authorization/Authorization";
 
 export default function CryptoEditDialog(props) {
+  const [assetsToDisplay, setAssetsToDisplay] = React.useState([]);
   const [assetsToUpdate, setAssetsToUpdate] = React.useState([]);
+  const [assetsToDelete, setAssetsToDelete] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(false);
   const [isSuccess, setIsSuccess] = React.useState(false);
   const [error, setError] = React.useState();
   const [allAssetsDeleted, setAllAssetsDeleted] = React.useState(false);
 
   React.useEffect(() => {
-    setAssetsToUpdate(props.assets);
+    setAssetsToDisplay(props.assets);
   }, [props.assets]);
 
   const config = getAuthHeaderConfig(props.token);
@@ -34,28 +36,25 @@ export default function CryptoEditDialog(props) {
     setIsLoading(false);
     setError();
     setAllAssetsDeleted(false);
+    setAssetsToDelete([]);
+    setAssetsToUpdate([]);
   };
 
   const handleAssetDelete = (cryptoName) => {
-    const newAssets = [...assetsToUpdate];
-    for (let i = 0; i < newAssets.length; i++) {
-      if (newAssets[i].CryptoName === cryptoName) {
-        newAssets[i]["Deleted"] = true;
+    for (const asset of props.assets) {
+      if (asset.CryptoName === cryptoName) {
+        if (assetsToDelete.length + 1 === props.assets.length) {
+          setAllAssetsDeleted(true);
+        }
+
+        setAssetsToDelete((oldAssetsToDelete) => [...oldAssetsToDelete, asset]);
+        setAssetsToDisplay((oldAssetsToDisplay) =>
+          oldAssetsToDisplay.filter((a) => a.CryptoName !== cryptoName)
+        );
+
+        return;
       }
     }
-
-    let numDeletedAssets = 0;
-    for (let i = 0; i < newAssets.length; i++) {
-      if (newAssets[i]["Deleted"]) {
-        numDeletedAssets++;
-      }
-    }
-
-    if (numDeletedAssets === newAssets.length) {
-      setAllAssetsDeleted(true);
-    }
-
-    setAssetsToUpdate(newAssets);
   };
 
   const handleAmountChange = (cryptoName, amount) => {
@@ -66,16 +65,29 @@ export default function CryptoEditDialog(props) {
       setError();
     }
 
-    const newAssets = [...assetsToUpdate];
-    for (let i = 0; i < newAssets.length; i++) {
-      if (newAssets[i].CryptoName === cryptoName) {
-        newAssets[i].Amount = amount;
-        newAssets[i]["Updated"] = true;
-        break;
+    const newAssetsToDisplay = [...assetsToDisplay];
+    const newAssetsToUpdate = [...assetsToUpdate];
+
+    for (const asset of newAssetsToDisplay) {
+      if (asset.CryptoName === cryptoName) {
+        asset["Amount"] = amount;
+
+        let updatedBefore = false;
+        for (const updatedAssets of newAssetsToUpdate) {
+          if (updatedAssets.CryptoName === cryptoName) {
+            updatedBefore = true;
+            updatedAssets["Amount"] = amount;
+          }
+        }
+
+        if (!updatedBefore) {
+          newAssetsToUpdate.push(asset);
+        }
       }
     }
 
-    setAssetsToUpdate(newAssets);
+    setAssetsToDisplay(newAssetsToDisplay);
+    setAssetsToUpdate(newAssetsToUpdate);
   };
 
   const handleUpdateAssets = () => {
@@ -84,23 +96,20 @@ export default function CryptoEditDialog(props) {
 
     const requests = [];
 
-    for (let i = 0; i < assetsToUpdate.length; i++) {
-      const cryptoName = assetsToUpdate[i]["CryptoName"];
+    for (const asset of assetsToUpdate) {
+      requests.push(
+        axios.put(
+          "http://localhost:8080/assets/" + asset.CryptoName,
+          { amount: asset.Amount },
+          config
+        )
+      );
+    }
 
-      if ("Updated" in assetsToUpdate[i]) {
-        const amount = assetsToUpdate[i]["Amount"];
-        requests.push(
-          axios.put(
-            "http://localhost:8080/assets/" + cryptoName,
-            { amount: amount },
-            config
-          )
-        );
-      } else if ("Deleted" in assetsToUpdate[i]) {
-        requests.push(
-          axios.delete("http://localhost:8080/assets/" + cryptoName, config)
-        );
-      }
+    for (const asset of assetsToDelete) {
+      requests.push(
+        axios.delete("http://localhost:8080/assets/" + asset.CryptoName, config)
+      );
     }
 
     axios
@@ -143,7 +152,7 @@ export default function CryptoEditDialog(props) {
         <DialogTitle>Edit your Assets</DialogTitle>
         <DialogContent>
           <CryptoEditForm
-            assetsToUpdate={assetsToUpdate}
+            assetsToUpdate={assetsToDisplay}
             handleAssetDelete={handleAssetDelete}
             handleAmountChange={handleAmountChange}
           />
