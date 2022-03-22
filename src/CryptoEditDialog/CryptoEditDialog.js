@@ -39,16 +39,12 @@ export default function CryptoEditDialog(props) {
   };
 
   const handleAssetDelete = (cryptoName) => {
-    for (const asset of props.assets) {
-      if (asset.CryptoName === cryptoName) {
-        setAssetsToDelete((oldAssetsToDelete) => [...oldAssetsToDelete, asset]);
-        setAssetsToDisplay((oldAssetsToDisplay) =>
-          oldAssetsToDisplay.filter((a) => a.CryptoName !== cryptoName)
-        );
+    const assetMarkedForDeletion = props.assets.find(a => a.CryptoName === cryptoName);
 
-        return;
-      }
-    }
+    setAssetsToDelete(oldAssetsToDelete => [...oldAssetsToDelete, assetMarkedForDeletion]);
+    setAssetsToDisplay(oldAssetsToDisplay =>
+          oldAssetsToDisplay.filter(a => a.CryptoName !== cryptoName)
+    );
   };
 
   const handleAmountChange = (cryptoName, amount) => {
