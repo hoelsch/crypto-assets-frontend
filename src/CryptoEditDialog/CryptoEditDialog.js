@@ -22,7 +22,6 @@ export default function CryptoEditDialog(props) {
   const [isLoading, setIsLoading] = React.useState(false);
   const [isSuccess, setIsSuccess] = React.useState(false);
   const [error, setError] = React.useState();
-  const [allAssetsDeleted, setAllAssetsDeleted] = React.useState(false);
 
   React.useEffect(() => {
     setAssetsToDisplay(props.assets);
@@ -35,7 +34,6 @@ export default function CryptoEditDialog(props) {
     setIsSuccess(false);
     setIsLoading(false);
     setError();
-    setAllAssetsDeleted(false);
     setAssetsToDelete([]);
     setAssetsToUpdate([]);
   };
@@ -43,10 +41,6 @@ export default function CryptoEditDialog(props) {
   const handleAssetDelete = (cryptoName) => {
     for (const asset of props.assets) {
       if (asset.CryptoName === cryptoName) {
-        if (assetsToDelete.length + 1 === props.assets.length) {
-          setAllAssetsDeleted(true);
-        }
-
         setAssetsToDelete((oldAssetsToDelete) => [...oldAssetsToDelete, asset]);
         setAssetsToDisplay((oldAssetsToDisplay) =>
           oldAssetsToDisplay.filter((a) => a.CryptoName !== cryptoName)
@@ -156,7 +150,7 @@ export default function CryptoEditDialog(props) {
             handleAssetDelete={handleAssetDelete}
             handleAmountChange={handleAmountChange}
           />
-          {allAssetsDeleted &&
+          {assetsToDisplay.length === 0 &&
             "All cryptos in your assets were marked for deletion. Click 'Apply' to confirm the deletion, or 'Cancel' for aborting it"}
           {error && <ErrorText error={error} />}
           {isLoading && <ProgressIcon />}
