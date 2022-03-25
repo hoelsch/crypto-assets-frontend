@@ -15,7 +15,7 @@ import CryptoEditForm from "./CryptoEditForm";
 
 import getAuthHeaderConfig from "../Authorization/Authorization";
 
-export default function CryptoEditDialog(props) {
+function CryptoEditDialog(props) {
   const [assetsToDisplay, setAssetsToDisplay] = React.useState([]);
   const [assetsToUpdate, setAssetsToUpdate] = React.useState([]);
   const [assetsToDelete, setAssetsToDelete] = React.useState([]);
@@ -38,9 +38,9 @@ export default function CryptoEditDialog(props) {
     setAssetsToUpdate([]);
   };
 
-  const handleAssetDelete = (cryptoName) => {
+  const handleAssetDelete = (cryptoToDelete) => {
     const assetMarkedForDeletion = props.assets.find(
-      (a) => a.CryptoName === cryptoName
+      (a) => a.CryptoName === cryptoToDelete
     );
 
     setAssetsToDelete((oldAssetsToDelete) => [
@@ -48,38 +48,24 @@ export default function CryptoEditDialog(props) {
       assetMarkedForDeletion,
     ]);
     setAssetsToDisplay((oldAssetsToDisplay) =>
-      oldAssetsToDisplay.filter((a) => a.CryptoName !== cryptoName)
+      oldAssetsToDisplay.filter((a) => a.CryptoName !== cryptoToDelete)
     );
   };
 
-  const handleAmountChange = (cryptoName, amount) => {
-    if (amount <= 0) {
-      amount = 0;
+  const handleAmountChange = (cryptoToUpdate, newAmount) => {
+    if (newAmount <= 0) {
+      newAmount = 0;
       setError("Amount must be greater than zero");
     } else {
       setError();
     }
 
-    const newAssetsToDisplay = [...assetsToDisplay];
-    const newAssetsToUpdate = [...assetsToUpdate];
+    const assetMarkedForUpdate = props.assets.find(
+      (a) => a.CryptoName === cryptoToUpdate
+    );
 
-    for (const asset of newAssetsToDisplay) {
-      if (asset.CryptoName === cryptoName) {
-        asset["Amount"] = amount;
-
-        let updatedBefore = false;
-        for (const updatedAssets of newAssetsToUpdate) {
-          if (updatedAssets.CryptoName === cryptoName) {
-            updatedBefore = true;
-            updatedAssets["Amount"] = amount;
-          }
-        }
-
-        if (!updatedBefore) {
-          newAssetsToUpdate.push(asset);
-        }
-      }
-    }
+    const newAssetsToDisplay = updateAssets(assetsToDisplay, assetMarkedForUpdate, newAmount)
+    const newAssetsToUpdate = updateAssets(assetsToUpdate, assetMarkedForUpdate, newAmount, true)
 
     setAssetsToDisplay(newAssetsToDisplay);
     setAssetsToUpdate(newAssetsToUpdate);
@@ -166,3 +152,27 @@ export default function CryptoEditDialog(props) {
     </>
   );
 }
+
+function updateAssets(assets, assetToUpdate, newAmount, addCryptoIfNotFoundInAssets = false) {
+  const newAssets = [...assets];
+
+  const assetMarkedForUpdate = newAssets.find(
+    (a) => a.CryptoName === assetToUpdate.CryptoName
+  );
+
+  if (assetMarkedForUpdate) {
+    assetMarkedForUpdate["Amount"] = newAmount;
+
+    return newAssets
+  }
+
+  if (addCryptoIfNotFoundInAssets) {
+    const assetMarkedForUpdate = assetToUpdate;
+    assetMarkedForUpdate["Amount"] = newAmount
+    newAssets.push(assetMarkedForUpdate);
+  }
+
+  return newAssets
+}
+
+export default CryptoEditDialog;
