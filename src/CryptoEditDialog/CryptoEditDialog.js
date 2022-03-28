@@ -75,23 +75,7 @@ function CryptoEditDialog(props) {
     setIsLoading(true);
     setError();
 
-    const requests = [];
-
-    for (const asset of assetsToUpdate) {
-      requests.push(
-        axios.put(
-          "http://localhost:8080/assets/" + asset.CryptoName,
-          { amount: asset.Amount },
-          config
-        )
-      );
-    }
-
-    for (const asset of assetsToDelete) {
-      requests.push(
-        axios.delete("http://localhost:8080/assets/" + asset.CryptoName, config)
-      );
-    }
+    const requests = getRequests(assetsToUpdate, assetsToDelete, config);
 
     axios
       .all(requests)
@@ -163,16 +147,38 @@ function updateAssets(assets, assetToUpdate, newAmount, addCryptoIfNotFoundInAss
   if (assetMarkedForUpdate) {
     assetMarkedForUpdate["Amount"] = newAmount;
 
-    return newAssets
+    return newAssets;
   }
 
   if (addCryptoIfNotFoundInAssets) {
     const assetMarkedForUpdate = assetToUpdate;
-    assetMarkedForUpdate["Amount"] = newAmount
+    assetMarkedForUpdate["Amount"] = newAmount;
     newAssets.push(assetMarkedForUpdate);
   }
 
-  return newAssets
+  return newAssets;
+}
+
+function getRequests(assetsToUpdate, assetsToDelete, config) {
+  const requests = [];
+
+  for (const asset of assetsToUpdate) {
+    requests.push(
+      axios.put(
+        "http://localhost:8080/assets/" + asset.CryptoName,
+        { amount: asset.Amount },
+        config
+      )
+    );
+  }
+
+  for (const asset of assetsToDelete) {
+    requests.push(
+      axios.delete("http://localhost:8080/assets/" + asset.CryptoName, config)
+    );
+  }
+
+  return requests;
 }
 
 export default CryptoEditDialog;
