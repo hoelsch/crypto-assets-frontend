@@ -8,7 +8,7 @@ import Typography from "@material-ui/core/Typography";
 
 import LinearProgressWithLabel from "./LinearProgressWithLabel";
 
-function CryptoListItem(props) {
+function AssetsListItem(props) {
   const listItemStyle = {
     background: "white",
     border: 0,
@@ -52,4 +52,4 @@ function CryptoListItem(props) {
   );
 }
 
-export default CryptoListItem;
+export default AssetsListItem;

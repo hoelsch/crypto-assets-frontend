@@ -5,7 +5,7 @@ import Grid from "@mui/material/Grid";
 
 import AddButton from "./AddButton";
 import AssetsPieChart from "./AssetsPieChart";
-import CryptoList from "./../CryptoList/CryptoList";
+import AssetsList from "./AssetsList/AssetsList";
 import CryptoAddDialog from "./../CryptoAddDialog/CryptoAddDialog";
 import CryptoEditDialog from "./../CryptoEditDialog/CryptoEditDialog";
 import EditButton from "./EditButton";
@@ -73,7 +73,7 @@ function AssetsOverviewPage(props) {
             alignItems="center"
           >
             <AssetsPieChart assets={assets} />
-            <CryptoList assets={assets} />
+            <AssetsList assets={assets} />
             {showEmtpyAssetsInfo && <EmptyAssetsInfo />}
             {error && <ErrorText error={error} />}
           </Grid>
