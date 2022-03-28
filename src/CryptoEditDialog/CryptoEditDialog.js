@@ -117,7 +117,7 @@ function CryptoEditDialog(props) {
         <DialogTitle>Edit your Assets</DialogTitle>
         <DialogContent>
           <CryptoEditForm
-            assetsToUpdate={assetsToDisplay}
+            assetsToDisplay={assetsToDisplay}
             handleAssetDelete={handleAssetDelete}
             handleAmountChange={handleAmountChange}
           />
