@@ -9,7 +9,7 @@ import Typography from "@material-ui/core/Typography";
 import LinearProgressWithLabel from "./LinearProgressWithLabel";
 
 function AssetsListItem(props) {
-  const listItemStyle = {
+  const style = {
     background: "white",
     border: 0,
     borderRadius: 8,
@@ -21,7 +21,7 @@ function AssetsListItem(props) {
   };
 
   return (
-    <div style={listItemStyle}>
+    <div style={style}>
       <ListItem>
         <ListItemAvatar>
           <Avatar src={props.asset.IconUrl} />
