@@ -7,28 +7,28 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 
-export default function SuccessDialog(props) {
+function SuccessDialog(props) {
   return (
-    <>
-      <Dialog
-        open={props.open}
-        onClose={props.handleClose}
-        fullWidth={true}
-        maxWidth={"xs"}
-      >
-        <DialogContent>
-          <CheckCircleIcon
-            color="success"
-            sx={{ fontSize: 80, textAlign: "center", width: 1 }}
-          />
-          <DialogContentText sx={{ mt: 1, textAlign: "center" }}>
-            {props.message}
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={props.handleClose}>Close</Button>
-        </DialogActions>
-      </Dialog>
-    </>
+    <Dialog
+      open={props.open}
+      onClose={props.handleClose}
+      fullWidth={true}
+      maxWidth={"xs"}
+    >
+      <DialogContent>
+        <CheckCircleIcon
+          color="success"
+          sx={{ fontSize: 80, textAlign: "center", width: 1 }}
+        />
+        <DialogContentText sx={{ mt: 1, textAlign: "center" }}>
+          {props.message}
+        </DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={props.handleClose}>Close</Button>
+      </DialogActions>
+    </Dialog>
   );
 }
+
+export default SuccessDialog;
