@@ -9,19 +9,12 @@ import DialogTitle from '@mui/material/DialogTitle';
 
 import axios from 'axios';
 
+import validateMailAddress from './Mail';
 import ErrorText from '../ErrorText/ErrorText';
 import ProgressIcon from '../ProgressIcon/ProgressIcon';
 import SuccessDialog from '../SuccessDialog/SuccessDialog';
 
-const validateEmail = (email) => {
-  return String(email)
-    .toLowerCase()
-    .match(
-      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-    );
-};
-
-export default function RegisterDialog() {
+function RegisterDialog() {
   const [open, setOpen] = React.useState(false);
   const [error, setError] = React.useState();
   const [isLoading, setIsLoading] = React.useState(false);
@@ -125,7 +118,7 @@ export default function RegisterDialog() {
                 variant="standard"
                 onInput={e => {
                   const providedUserMail = e.target.value;
-                  if (!validateEmail(providedUserMail)) {
+                  if (!validateMailAddress(providedUserMail)) {
                     setMailError("Invalid mail address provided")
                   } else {
                     setUserMail(providedUserMail);
@@ -171,3 +164,5 @@ export default function RegisterDialog() {
     </>
   );
 }
+
+export default RegisterDialog;
