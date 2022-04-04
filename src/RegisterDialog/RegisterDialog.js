@@ -14,8 +14,7 @@ import ErrorText from "../ErrorText/ErrorText";
 import ProgressIcon from "../ProgressIcon/ProgressIcon";
 import SuccessDialog from "../SuccessDialog/SuccessDialog";
 
-function RegisterDialog() {
-  const [open, setOpen] = React.useState(false);
+function RegisterDialog(props) {
   const [error, setError] = React.useState();
   const [isLoading, setIsLoading] = React.useState(false);
   const [isSuccess, setIsSuccess] = React.useState(false);
@@ -28,11 +27,11 @@ function RegisterDialog() {
   const [mailError, setMailError] = React.useState("");
   const [passwordError, setPasswordError] = React.useState("");
 
-  const handleClickOpen = () => {
+  const handleClickClose = () => {
+    props.handleClose();
     setError();
     setIsLoading(false);
     setIsSuccess(false);
-    setOpen(true);
 
     setUserName("");
     setUserMail("");
@@ -41,10 +40,6 @@ function RegisterDialog() {
     setUserNameError("");
     setMailError("");
     setPasswordError("");
-  };
-
-  const handleClose = () => {
-    setOpen(false);
   };
 
   const handleClickRegister = () => {
@@ -85,88 +80,83 @@ function RegisterDialog() {
     return (
       <SuccessDialog
         message={"Successfully registered user"}
-        open={open}
-        handleClose={handleClose}
+        open={props.open}
+        handleClose={handleClickClose}
       />
     );
   }
 
   return (
-    <>
-      <Button sx={{ mt: 5, mr: 5 }} onClick={handleClickOpen}>
-        Register
-      </Button>
-      <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Register</DialogTitle>
-        <DialogContent>
-          <>
-            <TextField
-              autoFocus
-              margin="dense"
-              id="name"
-              label="User Name"
-              error={userNameError}
-              helperText={userNameError}
-              fullWidth
-              variant="standard"
-              onInput={(e) => {
-                const providedUserName = e.target.value;
-                if (providedUserName.length < 3) {
-                  setUserNameError("User name must have at least 3 characters");
-                } else {
-                  setUserName(providedUserName);
-                  setUserNameError("");
-                }
-              }}
-            />
-            <TextField
-              margin="dense"
-              id="email"
-              label="Email Address"
-              type="email"
-              error={mailError}
-              helperText={mailError}
-              fullWidth
-              variant="standard"
-              onInput={(e) => {
-                const providedUserMail = e.target.value;
-                if (!validateMailAddress(providedUserMail)) {
-                  setMailError("Invalid mail address provided");
-                } else {
-                  setUserMail(providedUserMail);
-                  setMailError("");
-                }
-              }}
-            />
-            <TextField
-              margin="dense"
-              id="password"
-              label="Password"
-              error={passwordError}
-              helperText={passwordError}
-              type="password"
-              fullWidth
-              variant="standard"
-              onInput={(e) => {
-                const providedUserPassword = e.target.value;
-                if (providedUserPassword.length < 8) {
-                  setPasswordError("Password must have at least 8 characters");
-                } else {
-                  setUserPassword(providedUserPassword);
-                  setPasswordError("");
-                }
-              }}
-            />
-          </>
-          {error && <ErrorText error={error} />}
-          {isLoading && <ProgressIcon />}
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleClickRegister}>Register</Button>
-        </DialogActions>
-      </Dialog>
-    </>
+    <Dialog open={props.open} onClose={handleClickClose}>
+      <DialogTitle>Register</DialogTitle>
+      <DialogContent>
+        <>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="name"
+            label="User Name"
+            error={userNameError}
+            helperText={userNameError}
+            fullWidth
+            variant="standard"
+            onInput={(e) => {
+              const providedUserName = e.target.value;
+              if (providedUserName.length < 3) {
+                setUserNameError("User name must have at least 3 characters");
+              } else {
+                setUserName(providedUserName);
+                setUserNameError("");
+              }
+            }}
+          />
+          <TextField
+            margin="dense"
+            id="email"
+            label="Email Address"
+            type="email"
+            error={mailError}
+            helperText={mailError}
+            fullWidth
+            variant="standard"
+            onInput={(e) => {
+              const providedUserMail = e.target.value;
+              if (!validateMailAddress(providedUserMail)) {
+                setMailError("Invalid mail address provided");
+              } else {
+                setUserMail(providedUserMail);
+                setMailError("");
+              }
+            }}
+          />
+          <TextField
+            margin="dense"
+            id="password"
+            label="Password"
+            error={passwordError}
+            helperText={passwordError}
+            type="password"
+            fullWidth
+            variant="standard"
+            onInput={(e) => {
+              const providedUserPassword = e.target.value;
+              if (providedUserPassword.length < 8) {
+                setPasswordError("Password must have at least 8 characters");
+              } else {
+                setUserPassword(providedUserPassword);
+                setPasswordError("");
+              }
+            }}
+          />
+        </>
+        {error && <ErrorText error={error} />}
+        {isLoading && <ProgressIcon />}
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={handleClickClose}>Cancel</Button>
+        <Button onClick={handleClickRegister}>Register</Button>
+      </DialogActions>
+    </Dialog>
   );
 }
 
