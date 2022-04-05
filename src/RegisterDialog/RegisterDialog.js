@@ -18,62 +18,46 @@ function RegisterDialog(props) {
   const [error, setError] = React.useState();
   const [isLoading, setIsLoading] = React.useState(false);
   const [isSuccess, setIsSuccess] = React.useState(false);
-
   const [userName, setUserName] = React.useState("");
   const [userPassword, setUserPassword] = React.useState("");
   const [userMail, setUserMail] = React.useState("");
-
   const [userNameError, setUserNameError] = React.useState("");
   const [mailError, setMailError] = React.useState("");
   const [passwordError, setPasswordError] = React.useState("");
 
-  const handleClickClose = () => {
-    props.handleClose();
+  const clearState = () => {
     setError();
     setIsLoading(false);
     setIsSuccess(false);
-
     setUserName("");
     setUserMail("");
     setUserPassword("");
-
     setUserNameError("");
     setMailError("");
     setPasswordError("");
   };
 
+  const handleClickClose = () => {
+    props.handleClose();
+    clearState();
+  };
+
   const handleClickRegister = () => {
-    if (userNameError || passwordError || mailError) {
-      return;
-    }
-
-    if (userName === "" || userMail === "" || userPassword === "") {
-      return;
-    }
-
-    const user = { name: userName, mail: userMail, password: userPassword };
+    skipRegister(
+      userName,
+      userMail,
+      userPassword,
+      userNameError,
+      passwordError,
+      mailError
+    );
 
     setIsLoading(true);
     setError();
 
-    // TODO: make URL configurable
-    axios
-      .post("http://localhost:8080/users", user)
-      .then(() => {
-        setIsLoading(false);
-        setError(false);
-        setIsSuccess(true);
-      })
-      .catch((err) => {
-        setIsLoading(false);
-        setIsSuccess(false);
+    const user = { name: userName, mail: userMail, password: userPassword };
 
-        if (err.response && err.response.data && err.response.data.error) {
-          setError(err.response.data.error);
-        } else {
-          setError(err.message);
-        }
-      });
+    registerUser(user, setIsLoading, setError, setIsSuccess);
   };
 
   if (isSuccess) {
@@ -158,6 +142,40 @@ function RegisterDialog(props) {
       </DialogActions>
     </Dialog>
   );
+}
+
+function skipRegister(
+  userName,
+  userMail,
+  userPassword,
+  userNameError,
+  passwordError,
+  mailError
+) {
+  const errorExists = userNameError || passwordError || mailError;
+  const fieldEmpty = userName === "" || userMail === "" || userPassword === "";
+
+  return errorExists || fieldEmpty;
+}
+
+function registerUser(user, setIsLoading, setError, setIsSuccess) {
+  axios
+    .post("http://localhost:8080/users", user)
+    .then(() => {
+      setIsLoading(false);
+      setError(false);
+      setIsSuccess(true);
+    })
+    .catch((err) => {
+      setIsLoading(false);
+      setIsSuccess(false);
+
+      if (err.response && err.response.data && err.response.data.error) {
+        setError(err.response.data.error);
+      } else {
+        setError(err.message);
+      }
+    });
 }
 
 export default RegisterDialog;
