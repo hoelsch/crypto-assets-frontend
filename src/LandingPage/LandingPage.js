@@ -9,6 +9,7 @@ import Image from "../logo.png";
 
 function LandingPage(props) {
   const [registerDialogOpen, setRegisterDialogOpen] = React.useState(false);
+  const [loginDialogOpen, setLoginDialogOpen] = React.useState(false);
 
   const style = {
     height: 300,
@@ -29,11 +30,22 @@ function LandingPage(props) {
       <Button sx={{ mt: 5, mr: 5 }} onClick={() => setRegisterDialogOpen(true)}>
         Register
       </Button>
+      <Button
+        sx={{ mt: 5 }}
+        variant="contained"
+        onClick={() => setLoginDialogOpen(true)}
+      >
+        Login
+      </Button>
       <RegisterDialog
         open={registerDialogOpen}
         handleClose={() => setRegisterDialogOpen(false)}
       />
-      <LoginDialog handleLoginSuccess={props.handleLoginSuccess} />
+      <LoginDialog
+        open={loginDialogOpen}
+        handleLoginSuccess={props.handleLoginSuccess}
+        handleClose={() => setLoginDialogOpen(false)}
+      />
     </Box>
   );
 }

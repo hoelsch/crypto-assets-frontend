@@ -13,24 +13,20 @@ import ProgressIcon from "../ProgressIcon/ProgressIcon";
 import LoginForm from "./LoginForm";
 
 function LoginDialog(props) {
-  const [dialogOpen, setDialogOpen] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
   const [error, setError] = React.useState();
 
   const [userPassword, setUserPassword] = React.useState("");
   const [userMail, setUserMail] = React.useState("");
 
-  const handleClickOpen = () => {
+  const handleClickClose = () => {
+    props.handleClose();
+    
     setError();
     setIsLoading(false);
-    setDialogOpen(true);
 
     setUserMail("");
     setUserPassword("");
-  };
-
-  const handleClose = () => {
-    setDialogOpen(false);
   };
 
   const handleClickLogin = () => {
@@ -61,28 +57,23 @@ function LoginDialog(props) {
   };
 
   return (
-    <>
-      <Button sx={{ mt: 5 }} variant="contained" onClick={handleClickOpen}>
-        Login
-      </Button>
-      <Dialog open={dialogOpen} onClose={handleClose}>
-        <DialogTitle>Login</DialogTitle>
-        <DialogContent>
-          <LoginForm
-            setUserMail={setUserMail}
-            setUserPassword={setUserPassword}
-          />
-          {error && <ErrorText error={error} />}
-          {isLoading && <ProgressIcon />}
-        </DialogContent>
-        <DialogActions>
-          <>
-            <Button onClick={handleClose}>Cancel</Button>
-            <Button onClick={handleClickLogin}>Login</Button>
-          </>
-        </DialogActions>
-      </Dialog>
-    </>
+    <Dialog open={props.open} onClose={handleClickClose}>
+      <DialogTitle>Login</DialogTitle>
+      <DialogContent>
+        <LoginForm
+          setUserMail={setUserMail}
+          setUserPassword={setUserPassword}
+        />
+        {error && <ErrorText error={error} />}
+        {isLoading && <ProgressIcon />}
+      </DialogContent>
+      <DialogActions>
+        <>
+          <Button onClick={handleClickClose}>Cancel</Button>
+          <Button onClick={handleClickLogin}>Login</Button>
+        </>
+      </DialogActions>
+    </Dialog>
   );
 }
 
