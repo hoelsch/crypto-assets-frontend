@@ -87,8 +87,6 @@ function getTotalBalance(assets) {
   return total;
 }
 
-// TODO: move this function to a different location;
-//       it could be confusing if the color how a crypto asset is displayed is set in this file
 function setColorFor(fetchedAssets) {
   const colors = {
     bitcoin: "rgb(98,215,198)",
