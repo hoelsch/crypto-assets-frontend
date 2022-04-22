@@ -1,3 +1,5 @@
-# App for Managing Crypto Assets
+## App for Managing Crypto Assets
 
-![app screenshot](./screenshot.png)
+<p align="center">
+  <img src=./screenshot.png />
+</p>
