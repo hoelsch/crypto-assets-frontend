@@ -8,7 +8,7 @@ function AssetsList(props) {
   return (
     <List>
       {props.assets.map((asset) => (
-        <AssetsListItem asset={asset} />
+        <AssetsListItem key={asset.CryptoName} asset={asset} />
       ))}
     </List>
   );
