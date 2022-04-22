@@ -22,8 +22,10 @@ cd crypto-assets-frontend
 ```
 npm install
 ```
-4. Start backend (TBD)
-5. Start frontend app
+4. Start backend:
+Go to the [backend repo](https://github.com/hoelsch/crypto-assets-backend) and follow the instructions how to start the backend for development
+
+6. Start frontend app:
 ```
 npm start
 ```
