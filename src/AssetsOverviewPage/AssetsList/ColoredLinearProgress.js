@@ -12,7 +12,7 @@ function ColoredLinearProgress(props) {
     },
   })(LinearProgress);
 
-  return <StyledLinearProgress variant="determinate" value={props.value} />;
+  return <StyledLinearProgress variant="determinate" value={Number(props.value)} />;
 }
 
 export default ColoredLinearProgress;
