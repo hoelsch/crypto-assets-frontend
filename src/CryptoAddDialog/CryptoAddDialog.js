@@ -56,17 +56,19 @@ function CryptoAddDialog(props) {
   };
 
   const handleAmountChange = (event) => {
-    if (event.target.value < 0) {
-      event.target.value = 0;
+    let currentAmount = event.target.value;
+    
+    if (currentAmount < 0) {
+      currentAmount = 0;
     }
 
-    if (event.target.value === 0) {
+    if (currentAmount === 0) {
       setError("Amount must be greater than zero");
     } else {
       setError();
     }
 
-    setAmount(parseFloat(event.target.value));
+    setAmount(parseFloat(currentAmount));
   };
 
   if (supportedCryptos.length === 0) {
@@ -96,8 +98,8 @@ function CryptoAddDialog(props) {
           <CryptoAddForm
             supportedCryptos={supportedCryptos}
             selectedCrypto={selectedCrypto}
-            handleCryptoChange={handleCryptoChange}
             amount={amount}
+            handleCryptoChange={handleCryptoChange}
             handleAmountChange={handleAmountChange}
           />
           {error && <ErrorText error={error} />}
