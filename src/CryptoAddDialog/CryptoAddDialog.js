@@ -15,7 +15,7 @@ import ErrorText from "../ErrorText/ErrorText";
 
 function CryptoAddDialog(props) {
   const [supportedCryptos, setSupportedCryptos] = React.useState([]);
-  const [cryptoType, setCryptoType] = React.useState("bitcoin"); // TODO: rename cryptoType to make consistent with backend naming
+  const [selectedCrypto, setSelectedCrypto] = React.useState("bitcoin");
   const [amount, setAmount] = React.useState(0.1);
   const [isLoading, setIsLoading] = React.useState(false);
   const [isSuccess, setIsSuccess] = React.useState(false);
@@ -28,7 +28,7 @@ function CryptoAddDialog(props) {
     setIsSuccess(false);
     setIsLoading(false);
     setError();
-    setCryptoType("bitcoin");
+    setSelectedCrypto("bitcoin");
     setAmount(0.1);
   };
 
@@ -41,7 +41,7 @@ function CryptoAddDialog(props) {
     setError();
 
     addCryptoToAssets(
-      cryptoType,
+      selectedCrypto,
       amount,
       config,
       props.fetchAssets,
@@ -51,8 +51,8 @@ function CryptoAddDialog(props) {
     );
   };
 
-  const handleCryptoTypeChange = (event) => {
-    setCryptoType(event.target.value.toLowerCase());
+  const handleCryptoChange = (event) => {
+    setSelectedCrypto(event.target.value.toLowerCase());
   };
 
   const handleAmountChange = (event) => {
@@ -76,7 +76,7 @@ function CryptoAddDialog(props) {
   if (isSuccess) {
     return (
       <SuccessDialog
-        message={"Successfully added " + cryptoType + " to Assets"}
+        message={"Successfully added " + selectedCrypto + " to Assets"}
         open={props.open}
         handleClose={handleClose}
       />
@@ -95,8 +95,8 @@ function CryptoAddDialog(props) {
         <DialogContent>
           <CryptoAddForm
             supportedCryptos={supportedCryptos}
-            cryptoType={cryptoType}
-            handleCryptoTypeChange={handleCryptoTypeChange}
+            selectedCrypto={selectedCrypto}
+            handleCryptoChange={handleCryptoChange}
             amount={amount}
             handleAmountChange={handleAmountChange}
           />

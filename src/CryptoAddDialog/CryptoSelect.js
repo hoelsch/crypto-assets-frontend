@@ -4,16 +4,16 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 
-function CryptoTypeSelect(props) {
+function CryptoSelect(props) {
   return (
     <>
       <InputLabel id="crypto-type-select-label">Type</InputLabel>
       <Select
         labelId="crypto-type-select-label"
         id="crypto-type-select"
-        value={props.selectedCryptoType}
+        value={props.selectedCrypto}
         label="Crypto-Type"
-        onChange={props.handleCryptoTypeChange}
+        onChange={props.handleCryptoChange}
       >
         {getCryptoTypeList(props.supportedCryptos)}
       </Select>
@@ -35,4 +35,4 @@ function getCryptoTypeList(supportedCryptos) {
   return cryptoTypes;
 }
 
-export default CryptoTypeSelect;
+export default CryptoSelect;
