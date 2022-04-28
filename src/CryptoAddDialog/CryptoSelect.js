@@ -7,32 +7,32 @@ import Select from "@mui/material/Select";
 function CryptoSelect(props) {
   return (
     <>
-      <InputLabel id="crypto-type-select-label">Type</InputLabel>
+      <InputLabel id="crypto-select-label">Crypto</InputLabel>
       <Select
-        labelId="crypto-type-select-label"
-        id="crypto-type-select"
+        labelId="crypto-select-label"
+        id="crypto-select"
         value={props.selectedCrypto}
-        label="Crypto-Type"
+        label="Crypto"
         onChange={props.handleCryptoChange}
       >
-        {getCryptoTypeList(props.supportedCryptos)}
+        {getCryptoItemList(props.supportedCryptos)}
       </Select>
     </>
   );
 }
 
-function getCryptoTypeList(supportedCryptos) {
-  const cryptoTypes = [];
+function getCryptoItemList(supportedCryptos) {
+  const cryptoItems = [];
 
   for (let i = 0; i < supportedCryptos.length; i++) {
-    cryptoTypes.push(
+    cryptoItems.push(
       <MenuItem key={i} sx={{ display: "block" }} value={supportedCryptos[i]}>
         {supportedCryptos[i]}
       </MenuItem>
     );
   }
 
-  return cryptoTypes;
+  return cryptoItems;
 }
 
 export default CryptoSelect;
