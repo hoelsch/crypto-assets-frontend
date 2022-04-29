@@ -1,7 +1,7 @@
 import axios from "axios";
 
 function addCryptoToAssets(
-  cryptoType,
+  crypto,
   amount,
   config,
   fetchAssets,
@@ -11,7 +11,7 @@ function addCryptoToAssets(
 ) {
   axios
     .post(
-      "http://localhost:8080/assets/" + cryptoType,
+      "http://localhost:8080/assets/" + crypto,
       { amount: amount },
       config
     )

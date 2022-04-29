@@ -75,7 +75,7 @@ function CryptoEditDialog(props) {
     setIsLoading(true);
     setError();
 
-    const requests = getRequests(assetsToUpdate, assetsToDelete, config);
+    const requests = constructRequests(assetsToUpdate, assetsToDelete, config);
 
     axios
       .all(requests)
@@ -159,7 +159,7 @@ function updateAssets(assets, assetToUpdate, newAmount, addCryptoIfNotFoundInAss
   return newAssets;
 }
 
-function getRequests(assetsToUpdate, assetsToDelete, config) {
+function constructRequests(assetsToUpdate, assetsToDelete, config) {
   const requests = [];
 
   for (const asset of assetsToUpdate) {
