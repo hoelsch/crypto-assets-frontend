@@ -30,7 +30,7 @@ function fetchAssets(
       setShowEmtpyAssetsMessage(true);
     })
     .catch((err) => {
-      setError("Error: Could not fetch assets. Please refresh the page");
+      setError("Error: Could not fetch assets from backend server");
     });
 }
 
