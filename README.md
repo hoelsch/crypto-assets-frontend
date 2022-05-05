@@ -1,10 +1,10 @@
 # App for Managing Crypto Assets
 
-![docker build](https://github.com/hoelsch/crypto-assets-frontend/actions/workflows/docker-image.yml/badge.svg)
-
 <p align="center">
   <img src=./screenshot.png />
 </p>
+
+![docker build](https://github.com/hoelsch/crypto-assets-frontend/actions/workflows/docker-image.yml/badge.svg)
 
 With this app you can keep track of all of your crypto assets.
 
