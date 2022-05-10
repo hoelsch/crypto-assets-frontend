@@ -33,3 +33,8 @@ npm start
 ```
 
 ## Deployment
+
+Build the Docker image where `BACKEND_URL` is the URL of the [crypto-assets-backend](https://github.com/hoelsch/crypto-assets-backend) (please check the documentation how the backend can be deployed):
+```
+docker build --build-arg BACKEND_URL=https://my.backend.server:8080 -t crypto-assets-frontend .
+```
