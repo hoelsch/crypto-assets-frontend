@@ -15,6 +15,8 @@ import fetchAssets from "./FetchAssets";
 import getAuthHeaderConfig from "../Authorization/Authorization";
 import LogoutButton from "./LogoutButton";
 
+import { BACKEND_URL } from "../config";
+
 function AssetsOverviewPage(props) {
   const [openAddDialog, setOpenAddDialog] = React.useState(false);
   const [openEditDialog, setOpenEditDialog] = React.useState(false);
@@ -26,7 +28,7 @@ function AssetsOverviewPage(props) {
 
   const fetchAssetsFromServer = () =>
     fetchAssets(
-      "http://localhost:8080/assets", // TODO: make url configurable
+      `${BACKEND_URL}/assets`,
       config,
       assets,
       setAssets,

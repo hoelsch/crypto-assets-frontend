@@ -12,6 +12,8 @@ import ErrorText from "../ErrorText/ErrorText";
 import ProgressIcon from "../ProgressIcon/ProgressIcon";
 import LoginForm from "./LoginForm";
 
+import { BACKEND_URL } from "../config";
+
 function LoginDialog(props) {
   const [isLoading, setIsLoading] = React.useState(false);
   const [error, setError] = React.useState();
@@ -21,7 +23,7 @@ function LoginDialog(props) {
 
   const handleClickClose = () => {
     props.handleClose();
-    
+
     setError();
     setIsLoading(false);
 
@@ -35,9 +37,8 @@ function LoginDialog(props) {
     setIsLoading(true);
     setError();
 
-    // TODO: make URL configurable
     axios
-      .post("http://localhost:8080/login", user)
+      .post(`${BACKEND_URL}/login`, user)
       .then((response) => {
         const jwtToken = response.data.token;
         props.handleLoginSuccess(jwtToken);

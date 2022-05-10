@@ -15,6 +15,8 @@ import CryptoEditForm from "./CryptoEditForm";
 
 import getAuthHeaderConfig from "../Authorization/Authorization";
 
+import { BACKEND_URL } from "../config";
+
 function CryptoEditDialog(props) {
   const [assetsToDisplay, setAssetsToDisplay] = React.useState([]);
   const [assetsToUpdate, setAssetsToUpdate] = React.useState([]);
@@ -64,8 +66,17 @@ function CryptoEditDialog(props) {
       (a) => a.CryptoName === cryptoToUpdate
     );
 
-    const newAssetsToDisplay = updateAssets(assetsToDisplay, assetMarkedForUpdate, newAmount)
-    const newAssetsToUpdate = updateAssets(assetsToUpdate, assetMarkedForUpdate, newAmount, true)
+    const newAssetsToDisplay = updateAssets(
+      assetsToDisplay,
+      assetMarkedForUpdate,
+      newAmount
+    );
+    const newAssetsToUpdate = updateAssets(
+      assetsToUpdate,
+      assetMarkedForUpdate,
+      newAmount,
+      true
+    );
 
     setAssetsToDisplay(newAssetsToDisplay);
     setAssetsToUpdate(newAssetsToUpdate);
@@ -137,7 +148,12 @@ function CryptoEditDialog(props) {
   );
 }
 
-function updateAssets(assets, assetToUpdate, newAmount, addCryptoIfNotFoundInAssets = false) {
+function updateAssets(
+  assets,
+  assetToUpdate,
+  newAmount,
+  addCryptoIfNotFoundInAssets = false
+) {
   const newAssets = [...assets];
 
   const assetMarkedForUpdate = newAssets.find(
@@ -165,7 +181,7 @@ function constructRequests(assetsToUpdate, assetsToDelete, config) {
   for (const asset of assetsToUpdate) {
     requests.push(
       axios.put(
-        "http://localhost:8080/assets/" + asset.CryptoName,
+        `${BACKEND_URL}/assets/` + asset.CryptoName,
         { amount: asset.Amount },
         config
       )
@@ -174,7 +190,7 @@ function constructRequests(assetsToUpdate, assetsToDelete, config) {
 
   for (const asset of assetsToDelete) {
     requests.push(
-      axios.delete("http://localhost:8080/assets/" + asset.CryptoName, config)
+      axios.delete(`${BACKEND_URL}/assets/` + asset.CryptoName, config)
     );
   }
 

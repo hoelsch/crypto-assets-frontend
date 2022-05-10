@@ -9,7 +9,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import getAuthHeaderConfig from "../Authorization/Authorization";
 import CryptoAddForm from "./CryptoAddForm";
 import ProgressIcon from "../ProgressIcon/ProgressIcon";
-import {addCryptoToAssets, fetchSupportedCryptos} from "./Request";
+import { addCryptoToAssets, fetchSupportedCryptos } from "./Request";
 import SuccessDialog from "../SuccessDialog/SuccessDialog";
 import ErrorText from "../ErrorText/ErrorText";
 
@@ -57,7 +57,7 @@ function CryptoAddDialog(props) {
 
   const handleAmountChange = (event) => {
     let currentAmount = event.target.value;
-    
+
     if (currentAmount < 0) {
       currentAmount = 0;
     }

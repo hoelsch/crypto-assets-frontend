@@ -8,7 +8,9 @@ COPY package-lock.json /app
 WORKDIR /app
 
 RUN npm install react-scripts
-RUN npm run build
+
+ARG BACKEND_URL
+RUN REACT_APP_BACKEND_URL=${BACKEND_URL} npm run build
 
 FROM node:16-slim
 WORKDIR /app

@@ -14,6 +14,8 @@ import ErrorText from "../ErrorText/ErrorText";
 import ProgressIcon from "../ProgressIcon/ProgressIcon";
 import SuccessDialog from "../SuccessDialog/SuccessDialog";
 
+import { BACKEND_URL } from "../config";
+
 function RegisterDialog(props) {
   const [error, setError] = React.useState();
   const [isLoading, setIsLoading] = React.useState(false);
@@ -160,7 +162,7 @@ function skipRegister(
 
 function registerUser(user, setIsLoading, setError, setIsSuccess) {
   axios
-    .post("http://localhost:8080/users", user)
+    .post(`${BACKEND_URL}/users`, user)
     .then(() => {
       setIsLoading(false);
       setError(false);

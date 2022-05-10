@@ -18,7 +18,9 @@ function App() {
   };
 
   if (jwt) {
-    return <AssetsOverviewPage token={jwt} handleClickLogout={handleClickLogout} />;
+    return (
+      <AssetsOverviewPage token={jwt} handleClickLogout={handleClickLogout} />
+    );
   }
 
   return <LandingPage handleLoginSuccess={handleLoginSuccess} />;

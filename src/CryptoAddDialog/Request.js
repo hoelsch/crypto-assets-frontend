@@ -1,5 +1,7 @@
 import axios from "axios";
 
+import { BACKEND_URL } from "../config";
+
 function addCryptoToAssets(
   crypto,
   amount,
@@ -10,11 +12,7 @@ function addCryptoToAssets(
   setError
 ) {
   axios
-    .post(
-      "http://localhost:8080/assets/" + crypto,
-      { amount: amount },
-      config
-    )
+    .post(`${BACKEND_URL}/assets/` + crypto, { amount: amount }, config)
     .then(() => {
       setIsLoading(false);
       setIsSuccess(true);
@@ -34,7 +32,7 @@ function addCryptoToAssets(
 
 function fetchSupportedCryptos(setSupportedCryptos, setError, config) {
   axios
-    .get("http://localhost:8080/cryptos", config)
+    .get(`${BACKEND_URL}/cryptos`, config)
     .then((response) => {
       const responseData = response.data["cryptos"];
       const cryptos = [];
