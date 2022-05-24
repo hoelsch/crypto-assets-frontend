@@ -33,3 +33,12 @@ npm start
 ```
 
 ## Deployment
+
+1. Build the Docker image where `BACKEND_URL` is the URL of the [crypto-assets-backend](https://github.com/hoelsch/crypto-assets-backend) (please check the documentation how the backend can be deployed):
+```
+docker build --build-arg BACKEND_URL=https://my.backend.server:8080 -t crypto-assets-frontend .
+```
+- A container of this image will run a server that provides the optimized production build of the React app. By default, this server is running on port `3000` in the container. You can map this port to any available port of the Docker host.
+
+2. Push the image built in the previous step to a Docker registry of your choice
+3. Run the Docker image as container in a Kubernetes cluster
