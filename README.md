@@ -39,7 +39,7 @@ Then, you can run the Docker image as container with:
 ```
 docker run -p 3000:3000 crypto-assets-frontend
 ```
-
+The app can then be accessed via your browser at `localhost:3000`.
 ## Deployment
 
 1. Build the Docker image where `BACKEND_URL` is the URL of the [crypto-assets-backend](https://github.com/hoelsch/crypto-assets-backend) (please check the documentation how the backend can be deployed):
