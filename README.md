@@ -31,7 +31,7 @@ Go to the [backend repo](https://github.com/hoelsch/crypto-assets-backend) and f
 ```
 npm start
 ```
-Note: The commands above were verified to work with node version `16.5.0`. If you experience issues executing the commands with a different node version, you can alternatively build the Docker image with:
+Note: It was verified that the commands from above work with node version `16.5.0`. If you experience issues executing the commands with a different node version, you can alternatively build the Docker image with:
 ```
 docker build --build-arg BACKEND_URL=http://localhost:8080 -t crypto-assets-frontend .
 ```
