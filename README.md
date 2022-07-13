@@ -6,7 +6,7 @@
 
 ![docker build](https://github.com/hoelsch/crypto-assets-frontend/actions/workflows/docker-image.yml/badge.svg)
 
-With this app you can keep track of all of your crypto assets.
+App to keep track of all of your crypto assets.
 
 This repository contains the frontend which is based on [React](https://reactjs.org/). The corresponding backend can be found [here](https://github.com/hoelsch/crypto-assets-backend).
 
