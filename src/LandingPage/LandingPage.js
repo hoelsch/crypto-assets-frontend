@@ -43,7 +43,7 @@ function LandingPage(props) {
       />
       <LoginDialog
         open={loginDialogOpen}
-        handleLoginSuccess={props.handleLoginSuccess}
+        setUserId={props.setUserId}
         handleClose={() => setLoginDialogOpen(false)}
       />
     </Box>

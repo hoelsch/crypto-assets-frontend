@@ -7,12 +7,12 @@ function LoginForm(props) {
     <>
       <TextField
         margin="dense"
-        id="email"
-        label="Email Address"
-        type="email"
+        id="username"
+        label="Username"
+        type="text"
         fullWidth
         variant="standard"
-        onInput={(e) => props.setUserMail(e.target.value)}
+        onInput={(e) => props.setUsername(e.target.value)}
       />
       <TextField
         margin="dense"

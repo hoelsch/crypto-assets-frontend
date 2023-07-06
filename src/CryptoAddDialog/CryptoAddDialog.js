@@ -6,7 +6,6 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 
-import getAuthHeaderConfig from "../Authorization/Authorization";
 import CryptoAddForm from "./CryptoAddForm";
 import ProgressIcon from "../ProgressIcon/ProgressIcon";
 import { addCryptoToAssets, fetchSupportedCryptos } from "./Request";
@@ -20,8 +19,6 @@ function CryptoAddDialog(props) {
   const [isLoading, setIsLoading] = React.useState(false);
   const [isSuccess, setIsSuccess] = React.useState(false);
   const [error, setError] = React.useState();
-
-  const config = getAuthHeaderConfig(props.token);
 
   const handleClose = () => {
     props.setOpenAddDialog(false);
@@ -43,7 +40,7 @@ function CryptoAddDialog(props) {
     addCryptoToAssets(
       selectedCrypto,
       amount,
-      config,
+      props.userId,
       props.fetchAssets,
       setIsLoading,
       setIsSuccess,
@@ -71,9 +68,9 @@ function CryptoAddDialog(props) {
     setAmount(parseFloat(currentAmount));
   };
 
-  if (supportedCryptos.length === 0) {
-    fetchSupportedCryptos(setSupportedCryptos, setError, config);
-  }
+  React.useEffect(() => {
+    fetchSupportedCryptos(setSupportedCryptos, setError);
+  }, []);
 
   if (isSuccess) {
     return (

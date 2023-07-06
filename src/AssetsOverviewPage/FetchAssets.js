@@ -1,15 +1,16 @@
 import axios from "axios";
 
+import { BACKEND_URL } from "../config";
+
 function fetchAssets(
   url,
-  config,
   assets,
   setAssets,
   setShowEmtpyAssetsMessage,
   setError
 ) {
   axios
-    .get(url, config)
+    .get(url, { withCredentials: true })
     .then((response) => {
       setError(); // request was successful, reset previous error message
 
@@ -35,47 +36,38 @@ function fetchAssets(
 }
 
 function updateAssetsWithCurrentCryptoPrices(fetchedAssets, setAssets) {
-  axios.get("https://api.binance.com/api/v3/ticker/price").then((response) => {
-    const cryptoInfos = response.data;
+  const promises = [];
 
-    for (let asset of fetchedAssets) {
-      updateAssetPrice(asset, cryptoInfos);
-    }
+  for (let asset of fetchedAssets) {
+    const promise = axios
+      .get(`${BACKEND_URL}/cryptos/${asset.crypto_name}/price`, { withCredentials: true })
+      .then((response) => {
+        const price = response.data["price"];
 
-    const totalBalance = getTotalBalance(fetchedAssets);
+        const currentPrice = parseFloat(price);
+        const amount = parseFloat(asset.amount);
+        const totalPrice = amount * currentPrice;
 
-    for (let asset of fetchedAssets) {
-      asset["PercentageAmongAllAssets"] = (
-        (parseFloat(asset.TotalPrice) / parseFloat(totalBalance)) *
-        100
-      ).toFixed(2);
-    }
+        asset["CurrentPrice"] = currentPrice;
+        asset["TotalPrice"] = totalPrice.toFixed(2);
+      });
 
-    setAssets(fetchedAssets);
-  });
-}
-
-function updateAssetPrice(asset, cryptoInfos) {
-  const info = getCryptoInfoForAsset(asset, cryptoInfos);
-  const currentPrice = parseFloat(info["price"]);
-
-  const amount = parseFloat(asset.Amount);
-  const totalPrice = amount * currentPrice;
-
-  asset["CurrentPrice"] = currentPrice;
-  asset["TotalPrice"] = totalPrice.toFixed(2);
-}
-
-function getCryptoInfoForAsset(asset, cryptoInfos) {
-  const expectedSymbol = asset.Abbreviation + "EUR";
-
-  for (const info of cryptoInfos) {
-    const symbol = info["symbol"];
-
-    if (symbol === expectedSymbol) {
-      return info;
-    }
+    promises.push(promise);
   }
+
+  Promise.all(promises)
+    .then(() => {
+      const totalBalance = getTotalBalance(fetchedAssets);
+
+      for (let asset of fetchedAssets) {
+        asset["PercentageAmongAllAssets"] = (
+          (parseFloat(asset.TotalPrice) / parseFloat(totalBalance)) *
+          100
+        ).toFixed(2);
+      }
+
+      setAssets(fetchedAssets);
+    })
 }
 
 function getTotalBalance(assets) {
@@ -95,7 +87,7 @@ function setColorFor(fetchedAssets) {
   };
 
   for (let asset of fetchedAssets) {
-    asset["Color"] = colors[asset.CryptoName];
+    asset["Color"] = colors[asset.crypto_name];
   }
 }
 

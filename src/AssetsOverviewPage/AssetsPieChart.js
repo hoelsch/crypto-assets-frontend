@@ -25,7 +25,7 @@ function getPieChartContent(assets) {
 
   for (let asset of assets) {
     content.push({
-      title: asset.Abbreviation,
+      title: asset.abbreviation,
       value: parseFloat(asset.TotalPrice),
       color: asset.Color,
     });

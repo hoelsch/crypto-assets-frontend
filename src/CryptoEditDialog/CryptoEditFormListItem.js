@@ -12,7 +12,7 @@ function CryptoEditFormListItem(props) {
     <ListItem
       secondaryAction={
         <IconButton
-          onClick={() => props.handleAssetDelete(props.asset.CryptoName)}
+          onClick={() => props.handleAssetDelete(props.asset.crypto_name)}
           edge="end"
           aria-label="delete"
         >
@@ -23,7 +23,7 @@ function CryptoEditFormListItem(props) {
       <Grid container spacing={2}>
         <Grid item xs={4}>
           <Paper elevation={0} sx={{ mt: 4 }}>
-            {props.asset.CryptoName}
+            {props.asset.crypto_name}
           </Paper>
         </Grid>
         <Grid item xs={8}>
@@ -31,7 +31,7 @@ function CryptoEditFormListItem(props) {
             sx={{ width: 150 }}
             id="outlined-number"
             label="Amount"
-            value={props.asset.Amount}
+            value={props.asset.amount}
             type="number"
             margin="normal"
             InputLabelProps={{
@@ -42,7 +42,7 @@ function CryptoEditFormListItem(props) {
             }}
             onChange={(event) =>
               props.handleAmountChange(
-                props.asset.CryptoName,
+                props.asset.crypto_name,
                 parseFloat(event.target.value)
               )
             }

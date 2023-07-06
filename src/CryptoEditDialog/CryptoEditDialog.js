@@ -13,8 +13,6 @@ import SuccessDialog from "../SuccessDialog/SuccessDialog";
 import ErrorText from "../ErrorText/ErrorText";
 import CryptoEditForm from "./CryptoEditForm";
 
-import getAuthHeaderConfig from "../Authorization/Authorization";
-
 import { BACKEND_URL } from "../config";
 
 function CryptoEditDialog(props) {
@@ -29,8 +27,6 @@ function CryptoEditDialog(props) {
     setAssetsToDisplay(props.assets);
   }, [props.assets]);
 
-  const config = getAuthHeaderConfig(props.token);
-
   const handleClose = () => {
     props.setOpenEditDialog(false);
     setIsSuccess(false);
@@ -42,7 +38,7 @@ function CryptoEditDialog(props) {
 
   const handleAssetDelete = (cryptoToDelete) => {
     const assetMarkedForDeletion = props.assets.find(
-      (a) => a.CryptoName === cryptoToDelete
+      (a) => a.crypto_name === cryptoToDelete
     );
 
     setAssetsToDelete((oldAssetsToDelete) => [
@@ -50,7 +46,7 @@ function CryptoEditDialog(props) {
       assetMarkedForDeletion,
     ]);
     setAssetsToDisplay((oldAssetsToDisplay) =>
-      oldAssetsToDisplay.filter((a) => a.CryptoName !== cryptoToDelete)
+      oldAssetsToDisplay.filter((a) => a.crypto_name !== cryptoToDelete)
     );
   };
 
@@ -63,7 +59,7 @@ function CryptoEditDialog(props) {
     }
 
     const assetMarkedForUpdate = props.assets.find(
-      (a) => a.CryptoName === cryptoToUpdate
+      (a) => a.crypto_name === cryptoToUpdate
     );
 
     const newAssetsToDisplay = updateAssets(
@@ -83,13 +79,19 @@ function CryptoEditDialog(props) {
   };
 
   const handleUpdateAssets = () => {
+    for (const asset of assetsToUpdate) {
+      if (asset.amount == 0) {
+        return;
+      }
+    }
+
     setIsLoading(true);
     setError();
 
-    const requests = constructRequests(assetsToUpdate, assetsToDelete, config);
+    const requests = constructRequests(assetsToUpdate, assetsToDelete, props.userId);
 
     axios
-      .all(requests)
+      .all(requests, { withCredentials: true })
       .then(() => {
         setIsLoading(false);
         setIsSuccess(true);
@@ -157,40 +159,40 @@ function updateAssets(
   const newAssets = [...assets];
 
   const assetMarkedForUpdate = newAssets.find(
-    (a) => a.CryptoName === assetToUpdate.CryptoName
+    (a) => a.crypto_name === assetToUpdate.crypto_name
   );
 
   if (assetMarkedForUpdate) {
-    assetMarkedForUpdate["Amount"] = newAmount;
+    assetMarkedForUpdate["amount"] = newAmount;
 
     return newAssets;
   }
 
   if (addCryptoIfNotFoundInAssets) {
     const assetMarkedForUpdate = assetToUpdate;
-    assetMarkedForUpdate["Amount"] = newAmount;
+    assetMarkedForUpdate["amount"] = newAmount;
     newAssets.push(assetMarkedForUpdate);
   }
 
   return newAssets;
 }
 
-function constructRequests(assetsToUpdate, assetsToDelete, config) {
+function constructRequests(assetsToUpdate, assetsToDelete, userId) {
   const requests = [];
 
   for (const asset of assetsToUpdate) {
     requests.push(
       axios.put(
-        `${BACKEND_URL}/assets/` + asset.CryptoName,
-        { amount: asset.Amount },
-        config
+        `${BACKEND_URL}/users/${userId}/assets/` + asset.crypto_name,
+        { amount: asset.amount },
+        { withCredentials: true },
       )
     );
   }
 
   for (const asset of assetsToDelete) {
     requests.push(
-      axios.delete(`${BACKEND_URL}/assets/` + asset.CryptoName, config)
+      axios.delete(`${BACKEND_URL}/users/${userId}/assets/` + asset.crypto_name, { withCredentials: true })
     );
   }
 

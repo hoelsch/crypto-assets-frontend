@@ -24,19 +24,19 @@ function AssetsListItem(props) {
     <div style={style}>
       <ListItem>
         <ListItemAvatar>
-          <Avatar src={props.asset.IconUrl} />
+          <Avatar src={props.asset.iconurl} />
         </ListItemAvatar>
-        <ListItemText primary={props.asset.CryptoName} />
+        <ListItemText primary={props.asset.crypto_name} />
         <ListItemText
-          primary={props.asset.Amount}
+          primary={parseFloat(props.asset.amount).toFixed(1)}
           secondary={
             <Typography style={{ color: "rgb(50,61,73)", fontSize: 12 }}>
-              {props.asset.Abbreviation}
+              {props.asset.abbreviation}
             </Typography>
           }
         />
         <ListItemText
-          primary={props.asset.TotalPrice}
+          primary={parseFloat(props.asset.TotalPrice).toFixed(1)}
           secondary={
             <Typography style={{ color: "rgb(50,61,73)", fontSize: 12 }}>
               Euro (€)

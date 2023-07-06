@@ -57,7 +57,7 @@ function RegisterDialog(props) {
     setIsLoading(true);
     setError();
 
-    const user = { name: userName, mail: userMail, password: userPassword };
+    const user = { username: userName, email: userMail, password1: userPassword, password2: userPassword };
 
     registerUser(user, setIsLoading, setError, setIsSuccess);
   };
@@ -162,7 +162,7 @@ function skipRegister(
 
 function registerUser(user, setIsLoading, setError, setIsSuccess) {
   axios
-    .post(`${BACKEND_URL}/users`, user)
+    .post(`${BACKEND_URL}/register`, user)
     .then(() => {
       setIsLoading(false);
       setError(false);

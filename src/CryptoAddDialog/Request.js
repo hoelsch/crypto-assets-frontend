@@ -5,14 +5,14 @@ import { BACKEND_URL } from "../config";
 function addCryptoToAssets(
   crypto,
   amount,
-  config,
+  userId,
   fetchAssets,
   setIsLoading,
   setIsSuccess,
   setError
 ) {
   axios
-    .post(`${BACKEND_URL}/assets/` + crypto, { amount: amount }, config)
+    .post(`${BACKEND_URL}/users/${userId}/assets/` + crypto, { amount: amount }, { withCredentials: true })
     .then(() => {
       setIsLoading(false);
       setIsSuccess(true);
@@ -30,15 +30,15 @@ function addCryptoToAssets(
     });
 }
 
-function fetchSupportedCryptos(setSupportedCryptos, setError, config) {
+function fetchSupportedCryptos(setSupportedCryptos, setError) {
   axios
-    .get(`${BACKEND_URL}/cryptos`, config)
+    .get(`${BACKEND_URL}/cryptos`, { withCredentials: true })
     .then((response) => {
       const responseData = response.data["cryptos"];
       const cryptos = [];
 
       for (const crypto of responseData) {
-        cryptos.push(crypto["Name"]);
+        cryptos.push(crypto["name"]);
       }
 
       setSupportedCryptos(cryptos);

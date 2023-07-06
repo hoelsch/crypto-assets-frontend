@@ -19,7 +19,7 @@ function LoginDialog(props) {
   const [error, setError] = React.useState();
 
   const [userPassword, setUserPassword] = React.useState("");
-  const [userMail, setUserMail] = React.useState("");
+  const [username, setUsername] = React.useState("");
 
   const handleClickClose = () => {
     props.handleClose();
@@ -27,24 +27,26 @@ function LoginDialog(props) {
     setError();
     setIsLoading(false);
 
-    setUserMail("");
+    setUsername("");
     setUserPassword("");
   };
 
   const handleClickLogin = () => {
-    const user = { mail: userMail, password: userPassword };
+    const user = { username: username, password: userPassword };
 
     setIsLoading(true);
     setError();
 
     axios
-      .post(`${BACKEND_URL}/login`, user)
+      .post(`${BACKEND_URL}/login`, user, { withCredentials: true })
       .then((response) => {
-        const jwtToken = response.data.token;
-        props.handleLoginSuccess(jwtToken);
+        const userId = response.data.user_id
+        props.setUserId(userId);
 
         setIsLoading(false);
         setError(false);
+
+        axios.defaults.withCredentials = true;
       })
       .catch((err) => {
         setIsLoading(false);
@@ -62,7 +64,7 @@ function LoginDialog(props) {
       <DialogTitle>Login</DialogTitle>
       <DialogContent>
         <LoginForm
-          setUserMail={setUserMail}
+          setUsername={setUsername}
           setUserPassword={setUserPassword}
         />
         {error && <ErrorText error={error} />}

@@ -12,7 +12,6 @@ import EditButton from "./EditButton";
 import EmptyAssetsInfo from "./EmptyAssetsInfo";
 import ErrorText from "../ErrorText/ErrorText";
 import fetchAssets from "./FetchAssets";
-import getAuthHeaderConfig from "../Authorization/Authorization";
 import LogoutButton from "./LogoutButton";
 
 import { BACKEND_URL } from "../config";
@@ -24,25 +23,21 @@ function AssetsOverviewPage(props) {
   const [error, setError] = React.useState();
   const [showEmtpyAssetsInfo, setShowEmtpyAssetsInfo] = React.useState(false);
 
-  const config = getAuthHeaderConfig(props.token);
-
-  const fetchAssetsFromServer = () =>
+  const fetchAssetsFromServer = React.useCallback(() => {
     fetchAssets(
-      `${BACKEND_URL}/assets`,
-      config,
+      `${BACKEND_URL}/users/${props.userId}/assets`,
       assets,
       setAssets,
       setShowEmtpyAssetsInfo,
-      setError
+      setError,
     );
+  }, [assets, props.userId]);
 
   React.useEffect(() => {
-    if (assets.length > 0) {
-      return;
+    if (assets.length === 0) {
+      fetchAssetsFromServer();
     }
-
-    fetchAssetsFromServer();
-  });
+  }, [assets.length, fetchAssetsFromServer]);
 
   return (
     <>
@@ -86,6 +81,7 @@ function AssetsOverviewPage(props) {
         setOpenAddDialog={setOpenAddDialog}
         fetchAssets={fetchAssetsFromServer}
         token={props.token}
+        userId={props.userId}
       />
       <CryptoEditDialog
         open={openEditDialog}
@@ -93,6 +89,7 @@ function AssetsOverviewPage(props) {
         fetchAssets={fetchAssetsFromServer}
         assets={JSON.parse(JSON.stringify(assets))}
         token={props.token}
+        userId={props.userId}
       />
     </>
   );
