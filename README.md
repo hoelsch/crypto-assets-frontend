@@ -8,7 +8,7 @@
 
 App to keep track of all of your crypto assets.
 
-This repository contains the frontend which is based on [React](https://reactjs.org/). The corresponding backend can be found [here](https://github.com/hoelsch/crypto-assets-backend).
+This repository contains the frontend which is based on [React](https://reactjs.org/). The corresponding backend can be found [here](https://github.com/hoelsch/crypto-assets-server).
 
 ## Getting Started: Running the App Locally
 
@@ -25,7 +25,7 @@ cd crypto-assets-frontend
 npm install
 ```
 4. Start backend:
-Follow the [instructions](https://github.com/hoelsch/crypto-assets-backend#how-to-start-backend-locally) how to start the backend locally
+Follow the [instructions](https://github.com/hoelsch/crypto-assets-server#getting-started-running-the-server-locally) how to start the backend locally
 
 6. Start frontend app:
 ```sh
